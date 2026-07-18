@@ -1,14 +1,15 @@
 ---
 import { Map, Minus, Plus, RotateCcw } from 'lucide-astro';
+import { siteConfig } from '../site.config';
 
 const mapSrc = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/map.png`;
 ---
 
 <section id="tab-map" class="tab-content hidden space-y-4">
-  <div class="bg-slate-900 border-2 border-yellow-500 rounded-2xl shadow-xl overflow-hidden">
+  <div class="bg-slate-900 border-2 border-accent rounded-2xl shadow-xl overflow-hidden">
     <div class="flex items-center justify-between p-3 border-b border-slate-800">
-      <h2 class="text-lg font-bold text-yellow-400 flex items-center gap-2 font-scroll">
-        <Map /> SCHATZKARTE
+      <h2 class="text-lg font-bold text-accent flex items-center gap-2 font-scroll">
+        <Map /> {siteConfig.ui.mapTitle}
       </h2>
       <div class="flex items-center gap-2">
         <button id="map-zoom-out" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Zoom out"><Minus class="w-4 h-4" /></button>
@@ -20,7 +21,7 @@ const mapSrc = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/map.png`;
       <img id="map-img" src={mapSrc} alt="Schatzkarte" draggable="false"
            class="absolute top-0 left-0 origin-top-left will-change-transform max-w-none pointer-events-none" />
     </div>
-    <p class="text-center text-xs text-slate-500 p-2">Ziehen zum Verschieben · Mausrad / Kneifen zum Zoomen</p>
+    <p class="text-center text-xs text-slate-500 p-2">{siteConfig.ui.mapHint}</p>
   </div>
 </section>
 

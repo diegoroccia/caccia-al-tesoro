@@ -5,7 +5,8 @@ import GuideTab from '../components/GuideTab.astro';
 import MapViewer from '../components/MapViewer.astro';
 import PlayTab from '../components/PlayTab.astro';
 import PrintTab from '../components/PrintTab.astro';
-import { Sword, Volume2, BookOpen, Smartphone, Map, Printer } from 'lucide-astro';
+import { Sword, Volume2, BookOpen, Smartphone, Map, Printer, Github } from 'lucide-astro';
+import { siteConfig } from '../site.config';
 
 // Stazioni ordinate per campo `order`. Fonte di verità del contenuto della caccia.
 const entries = (await getCollection('stations')).sort((a, b) => a.data.order - b.data.order);
@@ -20,28 +21,28 @@ const stations = entries.map((e) => ({
 }));
 
 const tabs = [
-  { id: 'guide', label: 'Guida GM (IT)', Icon: BookOpen },
-  { id: 'play', label: 'Spiel (DE)', Icon: Smartphone },
-  { id: 'map', label: 'Karte', Icon: Map },
-  { id: 'print', label: 'Drucken (DE)', Icon: Printer },
+  { id: 'guide', label: siteConfig.tabs.guide, Icon: BookOpen },
+  { id: 'play', label: siteConfig.tabs.play, Icon: Smartphone },
+  { id: 'map', label: siteConfig.tabs.map, Icon: Map },
+  { id: 'print', label: siteConfig.tabs.print, Icon: Printer },
 ];
 ---
 
 <Layout>
-  <header class="bg-slate-900 border-b-4 border-yellow-500 p-4 shadow-lg no-print">
+  <header class="bg-slate-900 border-b-4 border-accent p-4 shadow-lg no-print">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="bg-yellow-500 p-2 rounded-lg text-slate-950 animate-bounce">
+        <div class="bg-accent p-2 rounded-lg text-slate-950 animate-bounce">
           <Sword class="w-8 h-8" />
         </div>
         <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-yellow-400 font-scroll tracking-wider">MONSTER BOY</h1>
-          <p class="text-xs text-slate-400 font-game">Cursed Kingdom Hunt</p>
+          <h1 class="text-xl sm:text-2xl font-bold text-accent font-scroll tracking-wider">{siteConfig.brand.name}</h1>
+          <p class="text-xs text-slate-400 font-game">{siteConfig.brand.tagline}</p>
         </div>
       </div>
       <button id="test-audio-btn" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-600 text-sm transition">
         <Volume2 class="w-4 h-4 text-emerald-400 animate-pulse" />
-        <span>Test Audio Synth</span>
+        <span>{siteConfig.ui.testAudio}</span>
       </button>
     </div>
   </header>
@@ -53,7 +54,7 @@ const tabs = [
         id={`btn-${id}`}
         class:list={[
           'tab-btn flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200',
-          id === 'guide' ? 'bg-yellow-500 text-slate-950 border-yellow-700' : 'bg-slate-800 text-slate-400 border-slate-950',
+          id === 'guide' ? 'bg-accent text-slate-950 border-accent-strong' : 'bg-slate-800 text-slate-400 border-slate-950',
         ]}
       >
         <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><Icon class="w-4 h-4" /> {label}</span>
@@ -68,15 +69,21 @@ const tabs = [
     <PrintTab entries={entries} />
   </main>
 
-  <footer class="mt-auto border-t border-slate-900 pt-8 text-center text-xs text-slate-500 no-print">
-    <p>Monster Boy - Schnitzeljagd • Upsala Familienzentrum Berlin</p>
+  <footer class="mt-auto border-t border-slate-900 pt-8 text-center text-xs text-slate-500 no-print space-y-2">
+    <p>{siteConfig.footer}</p>
+    <p>
+      <a href={siteConfig.repoUrl} target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1.5 text-slate-400 hover:text-accent transition">
+        <Github class="w-4 h-4" /> Quellcode auf GitHub
+      </a>
+    </p>
   </footer>
 </Layout>
 
 <script>
   import { testAudio } from '../scripts/audio';
 
-  const ACTIVE = ['bg-yellow-500', 'text-slate-950', 'border-yellow-700'];
+  const ACTIVE = ['bg-accent', 'text-slate-950', 'border-accent-strong'];
   const INACTIVE = ['bg-slate-800', 'text-slate-400', 'border-slate-950'];
 
   function switchTab(tabId: string) {

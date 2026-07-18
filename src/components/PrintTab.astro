@@ -1,11 +1,13 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import { Printer } from 'lucide-astro';
+import { siteConfig } from '../site.config';
 
 interface Props {
   entries: CollectionEntry<'stations'>[];
 }
 const { entries } = Astro.props;
+const ui = siteConfig.ui;
 
 // Renderizza il corpo Markdown (lettera pergamena) di ogni stazione.
 const scrolls = await Promise.all(
@@ -16,11 +18,11 @@ const scrolls = await Promise.all(
 <section id="tab-print" class="tab-content hidden space-y-6">
   <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl no-print flex flex-col sm:flex-row justify-between items-center gap-4">
     <div>
-      <h3 class="font-bold text-yellow-400">Bereit zum Drucken!</h3>
-      <p class="text-xs text-slate-400">Klicke auf den Button, um die Pergament-Rollen für das Spiel direkt auszudrucken.</p>
+      <h3 class="font-bold text-accent">{ui.printReadyTitle}</h3>
+      <p class="text-xs text-slate-400">{ui.printReadyHint}</p>
     </div>
     <button id="print-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg transition">
-      <Printer /> Jetzt drucken
+      <Printer /> {ui.printButton}
     </button>
   </div>
 

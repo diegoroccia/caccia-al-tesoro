@@ -6,6 +6,7 @@ export function playSynthTone(
   type: OscillatorType,
   duration: number,
   slideTo?: number,
+  volume = 0.15,
 ): void {
   if (!audioCtx) audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
   if (!audioCtx) return;
@@ -14,7 +15,7 @@ export function playSynthTone(
   osc.type = type || 'sine';
   osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
   if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, audioCtx.currentTime + duration);
-  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  gain.gain.setValueAtTime(volume, audioCtx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
   osc.connect(gain);
   gain.connect(audioCtx.destination);
@@ -24,11 +25,15 @@ export function playSynthTone(
 
 export type Tone = { freq: number; type: OscillatorType; duration: number; slideTo?: number; delay: number };
 
+// Volume degli effetti per stazione: più alto del default perché usano frequenze
+// basse e onde sine/triangle, percepite molto più deboli della fanfara di test.
+const STATION_VOLUME = 0.5;
+
 // Suona una sequenza di toni con i rispettivi ritardi (ms).
 export function playSequence(tones: Tone[]): void {
   for (const t of tones) {
-    if (t.delay) setTimeout(() => playSynthTone(t.freq, t.type, t.duration, t.slideTo), t.delay);
-    else playSynthTone(t.freq, t.type, t.duration, t.slideTo);
+    if (t.delay) setTimeout(() => playSynthTone(t.freq, t.type, t.duration, t.slideTo, STATION_VOLUME), t.delay);
+    else playSynthTone(t.freq, t.type, t.duration, t.slideTo, STATION_VOLUME);
   }
 }
 

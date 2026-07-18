@@ -2,6 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap');
 @import "tailwindcss";
 
+/* Colore accento del tema. Genera le utility bg-accent/text-accent/border-accent
+   ecc. I valori di default vengono sovrascritti a runtime da Layout.astro
+   (variabili CSS lette da src/site.config.ts), quindi il tema si cambia da lì. */
+@theme {
+  --color-accent: #eab308;
+  --color-accent-strong: #a16207;
+}
+
 .font-game {
   font-family: 'Press Start 2P', monospace;
 }

@@ -1,15 +1,18 @@
 ---
 import '../styles/global.css';
+import { siteConfig } from '../site.config';
 
 interface Props {
   title?: string;
 }
-const { title = 'Monster Boy - Schnitzeljagd Upsala' } = Astro.props;
+const { title = siteConfig.title } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Sovrascrive a runtime i token del tema definiti in global.css (@theme).
+const themeVars = `--color-accent:${siteConfig.theme.accent};--color-accent-strong:${siteConfig.theme.accentStrong};`;
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang="de" style={themeVars}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
