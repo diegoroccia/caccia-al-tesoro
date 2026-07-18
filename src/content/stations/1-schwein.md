@@ -14,7 +14,7 @@ sound:
   - { freq: 150, type: triangle, duration: 0.3, slideTo: 100, delay: 0 }
   - { freq: 140, type: triangle, duration: 0.3, slideTo: 90, delay: 150 }
 questLabel: "START QUEST"
-questTitle: "📜 QUEST 1: Der Schweine-Zauber"
+questTitle: "🐷 QUEST 1: Der Schweine-Zauber"
 transformation: "Schweinchen (Schnüffeln)"
 targetLocation: "Kletterschloss / Rutsche"
 ---
