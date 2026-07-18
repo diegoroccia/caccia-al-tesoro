@@ -1,0 +1,45 @@
+/* I @import devono stare in cima. Font di gioco + Tailwind v4 (CSS-first, niente config). */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap');
+@import "tailwindcss";
+
+.font-game {
+  font-family: 'Press Start 2P', monospace;
+}
+.font-scroll {
+  font-family: 'Cinzel', serif;
+}
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #0b1528;
+  color: #f3f4f6;
+}
+
+/* Sfondo pergamena (tab Drucken) */
+.scroll-bg {
+  background-color: #fcf4e3;
+  background-image: radial-gradient(#f3e5c8 1px, transparent 0), radial-gradient(#f3e5c8 1px, #fcf4e3 1px);
+  background-size: 8px 8px;
+}
+
+/* Stile speciale per la stampa delle pergamene */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  /* In stampa mostra sempre le pergamene anche se il tab è nascosto a schermo */
+  .print-only-show {
+    display: block !important;
+  }
+  .print-scroll {
+    border: 3px double #8b5a2b !important;
+    background: #fff8eb !important;
+    color: #3e2723 !important;
+    page-break-inside: avoid;
+    margin-bottom: 2rem !important;
+    box-shadow: none !important;
+  }
+}

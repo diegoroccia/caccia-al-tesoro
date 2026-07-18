@@ -1,0 +1,149 @@
+---
+import { ChevronLeft, ChevronRight, Gamepad2, Play, Activity } from 'lucide-astro';
+
+interface Tone {
+  freq: number;
+  type: 'sine' | 'square' | 'triangle' | 'sawtooth';
+  duration: number;
+  slideTo?: number;
+  delay: number;
+}
+interface StationData {
+  emoji: string;
+  title: string;
+  subtitle: string;
+  riddle: string;
+  action: string;
+  spoiler: string;
+  sound: Tone[];
+}
+interface Props {
+  stations: StationData[];
+}
+const { stations } = Astro.props;
+const first = stations[0];
+---
+
+<section id="tab-play" class="tab-content hidden space-y-6">
+  <div class="bg-slate-900 border-2 border-yellow-500 p-4 rounded-2xl shadow-xl flex justify-between items-center no-print">
+    <button id="quest-prev" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300" aria-label="Zurück">
+      <ChevronLeft />
+    </button>
+    <div class="text-center">
+      <span class="text-xs font-game text-yellow-500">QUEST STEP</span>
+      <h3 id="quest-number" class="font-bold font-scroll text-lg">1 VON {stations.length}</h3>
+    </div>
+    <button id="quest-next" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300" aria-label="Weiter">
+      <ChevronRight />
+    </button>
+  </div>
+
+  <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl shadow-2xl relative overflow-hidden">
+    <div class="absolute top-0 right-0 p-8 text-slate-900/40 pointer-events-none select-none">
+      <Gamepad2 class="w-48 h-48" />
+    </div>
+
+    <div class="relative z-10 space-y-6">
+      <div class="flex items-center gap-4">
+        <div id="quest-emoji" class="text-5xl bg-slate-800 p-4 rounded-2xl border-2 border-slate-700 animate-pulse">
+          {first.emoji}
+        </div>
+        <div>
+          <span id="quest-subtitle" class="text-xs font-game text-rose-500">{first.subtitle}</span>
+          <h2 id="quest-title" class="text-2xl font-bold text-slate-100 font-scroll">{first.title}</h2>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <p class="font-bold text-sm text-yellow-400">Retro-Soundeffekt (8-bit)</p>
+          <p class="text-xs text-slate-400">Drücken, um das magische Geräusch abzuspielen!</p>
+        </div>
+        <button id="audio-play-btn" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg transition">
+          <Play class="w-4 h-4" /> Abspielen!
+        </button>
+      </div>
+
+      <div class="bg-amber-50/10 p-5 rounded-xl border border-amber-500/20">
+        <p class="text-xs font-game text-amber-400 mb-2">📜 RAETSEL ZUM VORLESEN:</p>
+        <p id="quest-riddle" class="italic text-lg text-amber-100 leading-relaxed font-serif whitespace-pre-line">{first.riddle}</p>
+      </div>
+
+      <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <p class="font-bold text-sm text-emerald-400 flex items-center gap-2">
+          <Activity class="w-4 h-4" /> Was die Kinder tun müssen:
+        </p>
+        <p id="quest-action" class="text-sm text-slate-300 mt-2">{first.action}</p>
+      </div>
+
+      <div class="pt-4 border-t border-slate-900">
+        <button id="quest-spoiler-btn" class="text-xs text-slate-500 hover:text-slate-400 underline">
+          Zielort anzeigen/verstecken (Spoiler)
+        </button>
+        <p id="quest-spoiler" class="hidden text-sm font-bold text-emerald-500 mt-2">{first.spoiler}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+    <h4 class="text-xs font-game text-slate-400 mb-3 text-center">FREIGESCHALTETE RUNEN</h4>
+    <div class="flex justify-around items-center">
+      {stations.map((s, i) => (
+        <span id={`badge-${i}`} class="text-2xl filter grayscale opacity-30 transition">{s.emoji}</span>
+      ))}
+    </div>
+  </div>
+
+  <script type="application/json" id="stations-data" set:html={JSON.stringify(stations)} />
+</section>
+
+<script>
+  import { playSynthTone, playSequence, type Tone } from '../scripts/audio';
+
+  // Stato del tab "Spiel".
+  type Station = { emoji: string; title: string; subtitle: string; riddle: string; action: string; spoiler: string; sound: Tone[] };
+
+  const dataEl = document.getElementById('stations-data');
+  const steps: Station[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+  let currentStep = 0;
+
+  function playCurrentSynth() {
+    const s = steps[currentStep];
+    if (s) playSequence(s.sound);
+  }
+
+  const $ = (id: string) => document.getElementById(id);
+
+  function updateStepUI() {
+    const step = steps[currentStep];
+    if (!step) return;
+    $('quest-number')!.innerText = `${currentStep + 1} VON ${steps.length}`;
+    $('quest-emoji')!.innerText = step.emoji;
+    $('quest-title')!.innerText = step.title;
+    $('quest-subtitle')!.innerText = step.subtitle;
+    $('quest-riddle')!.innerText = step.riddle;
+    $('quest-action')!.innerText = step.action;
+    $('quest-spoiler')!.innerText = step.spoiler;
+    $('quest-spoiler')!.classList.add('hidden');
+
+    for (let i = 0; i < steps.length; i++) {
+      const badge = $(`badge-${i}`);
+      if (!badge) continue;
+      const unlocked = i <= currentStep;
+      badge.classList.toggle('grayscale', !unlocked);
+      badge.classList.toggle('opacity-30', !unlocked);
+      badge.classList.toggle('scale-110', unlocked);
+    }
+  }
+
+  $('quest-prev')?.addEventListener('click', () => {
+    if (currentStep > 0) { currentStep--; updateStepUI(); playSynthTone(400, 'sine', 0.1, 200); }
+  });
+  $('quest-next')?.addEventListener('click', () => {
+    if (currentStep < steps.length - 1) { currentStep++; updateStepUI(); playSynthTone(600, 'sine', 0.1, 900); }
+  });
+  $('quest-spoiler-btn')?.addEventListener('click', () => $('quest-spoiler')?.classList.toggle('hidden'));
+  $('audio-play-btn')?.addEventListener('click', playCurrentSynth);
+
+  updateStepUI();
+</script>

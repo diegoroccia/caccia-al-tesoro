@@ -1,0 +1,65 @@
+---
+import { Compass, MapPin, ShieldCheck, Milestone } from 'lucide-astro';
+
+// Percorso GM: derivato dai passaggi tra stazioni (contenuto statico italiano).
+const route = [
+  { emoji: '🐷', bg: 'bg-pink-600 text-white', title: '1. Tavolo Festa ➡️ Castello Scivolo', desc: 'Maledizione del <strong>Maiale (Pig)</strong>: corrono annusando l\'aria.' },
+  { emoji: '🐍', bg: 'bg-green-600 text-white', title: '2. Castello Scivolo ➡️ La Barca', desc: 'Trasformazione in <strong>Serpente (Snake)</strong>: scivolano e strisciano pancia a terra per pochi metri fino alla barca.' },
+  { emoji: '🐸', bg: 'bg-emerald-500 text-slate-950', title: '3. La Barca ➡️ Tappeto Elastico Conigli', desc: 'Trasformazione in <strong>Rana (Frog)</strong>: saltano a piedi uniti. Devono saltare sul tappeto elastico per afferrare l\'indizio appeso!' },
+  { emoji: '🦁', bg: 'bg-amber-600 text-white', title: '4. Casa Conigli ➡️ La Prigione (Gabbia)', desc: 'Trasformazione in <strong>Leone (Lion)</strong>: corrono ruggendo con gli artigli.' },
+  { emoji: '🐉', bg: 'bg-red-600 text-white', title: '5. La Prigione ➡️ Il Palco', desc: 'Trasformazione in <strong>Drago (Dragon)</strong>: volano spiegando le ali fino al tempio di pietra.' },
+];
+---
+
+<section id="tab-guide" class="tab-content space-y-6">
+  <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+    <h2 class="text-2xl font-bold text-yellow-400 mb-4 flex items-center gap-2 font-scroll">
+      <Compass /> MAPPA E PREPARAZIONE (ITALIANO)
+    </h2>
+    <p class="text-slate-300 leading-relaxed mb-4 text-sm sm:text-base">
+      Benvenuto Game Master! Questa caccia al tesoro è pensata per far divertire i bambini in <strong>tedesco</strong>, mentre tu gestisci la sequenza dal telefono in italiano.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+        <h3 class="font-bold text-emerald-400 mb-2 flex items-center gap-2"><MapPin class="w-4 h-4" /> Punti Chiave Cortile</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>📍 <strong>Start (Tavolo):</strong> Punto di raduno iniziale dei piccoli eroi.</li>
+          <li>📍 <strong>Castello Scivolo:</strong> La fortezza con lo scivolo argentato.</li>
+          <li>📍 <strong>La Barca:</strong> La barca di legno posizionata nella sabbia.</li>
+          <li>📍 <strong>Casa Conigli + Tappeto:</strong> Recinto coniglietti + trampolino.</li>
+          <li>📍 <strong>La Prigione:</strong> La gabbia di legno nell'angolo in basso a sinistra.</li>
+          <li>📍 <strong>Il Palco:</strong> Il teatro di pietra sullo sfondo.</li>
+        </ul>
+      </div>
+
+      <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+        <h3 class="font-bold text-amber-400 mb-2 flex items-center gap-2"><ShieldCheck class="w-4 h-4" /> Preparazione</h3>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>📜 Stampa le <strong>Pergamene in tedesco</strong> dal tab "Drucken".</li>
+          <li>🪢 Nascondi gli indizi nei 5 punti corrispondenti prima dell'inizio della festa.</li>
+          <li>🍬 <strong>Il Tesoro:</strong> Un bauletto con dolci e monete nascosto vicino alla <strong>Gabbia/Prigione</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+    <h3 class="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2 font-scroll">
+      <Milestone /> IL NUOVO PERCORSO (6 ANNI)
+    </h3>
+    <div class="space-y-4">
+      {route.map((r) => (
+        <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+          <div class={`${r.bg} rounded-full p-2.5 text-center shrink-0`}>
+            <span class="font-game text-xs">{r.emoji}</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-100">{r.title}</h4>
+            <p class="text-xs sm:text-sm text-slate-400" set:html={r.desc} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,153 @@
+---
+import { Map, Minus, Plus, RotateCcw } from 'lucide-astro';
+
+const mapSrc = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/map.png`;
+---
+
+<section id="tab-map" class="tab-content hidden space-y-4">
+  <div class="bg-slate-900 border-2 border-yellow-500 rounded-2xl shadow-xl overflow-hidden">
+    <div class="flex items-center justify-between p-3 border-b border-slate-800">
+      <h2 class="text-lg font-bold text-yellow-400 flex items-center gap-2 font-scroll">
+        <Map /> SCHATZKARTE
+      </h2>
+      <div class="flex items-center gap-2">
+        <button id="map-zoom-out" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Zoom out"><Minus class="w-4 h-4" /></button>
+        <button id="map-zoom-in" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Zoom in"><Plus class="w-4 h-4" /></button>
+        <button id="map-reset" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Reset"><RotateCcw class="w-4 h-4" /></button>
+      </div>
+    </div>
+    <div id="map-viewport" class="relative w-full h-[70vh] overflow-hidden bg-slate-950 touch-none cursor-grab select-none">
+      <img id="map-img" src={mapSrc} alt="Schatzkarte" draggable="false"
+           class="absolute top-0 left-0 origin-top-left will-change-transform max-w-none pointer-events-none" />
+    </div>
+    <p class="text-center text-xs text-slate-500 p-2">Ziehen zum Verschieben · Mausrad / Kneifen zum Zoomen</p>
+  </div>
+</section>
+
+<script>
+  // Visualizzatore mappa: pan & zoom (mouse, touch, pinch). Nessuna libreria esterna.
+  const state = { scale: 1, minScale: 1, maxScale: 6, x: 0, y: 0, baseW: 0, baseH: 0, ready: false };
+  const vp = document.getElementById('map-viewport') as HTMLElement | null;
+  const img = document.getElementById('map-img') as HTMLImageElement | null;
+
+  function clamp() {
+    if (!vp) return;
+    const w = state.baseW * state.scale;
+    const h = state.baseH * state.scale;
+    const vw = vp.clientWidth, vh = vp.clientHeight;
+    // Immagine più piccola del viewport → centra; altrimenti limita il pan ai bordi.
+    state.x = w <= vw ? (vw - w) / 2 : Math.min(0, Math.max(vw - w, state.x));
+    state.y = h <= vh ? (vh - h) / 2 : Math.min(0, Math.max(vh - h, state.y));
+  }
+
+  function apply() {
+    if (!img) return;
+    clamp();
+    img.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+  }
+
+  function reset() {
+    state.scale = 1;
+    state.x = 0;
+    state.y = 0;
+    apply();
+  }
+
+  function fit() {
+    // Il tab parte nascosto (clientWidth 0): il fit va (ri)calcolato quando è visibile.
+    if (!vp || !img || !img.naturalWidth || !vp.clientWidth) return false;
+    const f = vp.clientWidth / img.naturalWidth;
+    state.baseW = img.naturalWidth * f;
+    state.baseH = img.naturalHeight * f;
+    img.style.width = state.baseW + 'px';
+    img.style.height = state.baseH + 'px';
+    state.ready = true;
+    reset();
+    return true;
+  }
+
+  // Zoom mantenendo fisso il punto (px,py) relativo al viewport.
+  function zoomAt(factor: number, px: number, py: number) {
+    const prev = state.scale;
+    const next = Math.min(state.maxScale, Math.max(state.minScale, prev * factor));
+    if (next === prev) return;
+    const ratio = next / prev;
+    state.x = px - (px - state.x) * ratio;
+    state.y = py - (py - state.y) * ratio;
+    state.scale = next;
+    apply();
+  }
+
+  function zoomCentered(factor: number) {
+    if (!vp) return;
+    zoomAt(factor, vp.clientWidth / 2, vp.clientHeight / 2);
+  }
+
+  if (vp && img) {
+    document.getElementById('map-zoom-out')?.addEventListener('click', () => zoomCentered(0.8));
+    document.getElementById('map-zoom-in')?.addEventListener('click', () => zoomCentered(1.25));
+    document.getElementById('map-reset')?.addEventListener('click', reset);
+
+    vp.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const r = vp.getBoundingClientRect();
+      zoomAt(e.deltaY < 0 ? 1.15 : 0.87, e.clientX - r.left, e.clientY - r.top);
+    }, { passive: false });
+
+    // Pan con mouse (pointer events, esclusi i touch gestiti sotto).
+    let dragging = false, lastX = 0, lastY = 0;
+    vp.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') return;
+      dragging = true; lastX = e.clientX; lastY = e.clientY;
+      vp.style.cursor = 'grabbing'; vp.setPointerCapture(e.pointerId);
+    });
+    vp.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      state.x += e.clientX - lastX; state.y += e.clientY - lastY;
+      lastX = e.clientX; lastY = e.clientY; apply();
+    });
+    const endDrag = () => { dragging = false; vp.style.cursor = 'grab'; };
+    vp.addEventListener('pointerup', endDrag);
+    vp.addEventListener('pointercancel', endDrag);
+
+    // Touch: pan a un dito, pinch a due dita.
+    let p: any = null;
+    const dist = (t: TouchList) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const mid = (t: TouchList) => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+    vp.addEventListener('touchstart', (e) => {
+      const r = vp.getBoundingClientRect();
+      if (e.touches.length === 1) {
+        p = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if (e.touches.length === 2) {
+        const m = mid(e.touches);
+        p = { mode: 'pinch', d: dist(e.touches), cx: m.x - r.left, cy: m.y - r.top };
+      }
+    }, { passive: false });
+    vp.addEventListener('touchmove', (e) => {
+      if (!p) return;
+      e.preventDefault();
+      if (p.mode === 'pan' && e.touches.length === 1) {
+        state.x += e.touches[0].clientX - p.x;
+        state.y += e.touches[0].clientY - p.y;
+        p.x = e.touches[0].clientX; p.y = e.touches[0].clientY;
+        apply();
+      } else if (p.mode === 'pinch' && e.touches.length === 2) {
+        const d = dist(e.touches);
+        zoomAt(d / p.d, p.cx, p.cy);
+        p.d = d;
+      }
+    }, { passive: false });
+    vp.addEventListener('touchend', () => { p = null; });
+
+    // Dimensiona la mappa solo quando il tab diventa visibile.
+    document.addEventListener('tabshown', (e) => {
+      if ((e as CustomEvent).detail !== 'map') return;
+      requestAnimationFrame(() => { if (!state.ready) fit(); else apply(); });
+    });
+
+    window.addEventListener('resize', () => {
+      const visible = !document.getElementById('tab-map')?.classList.contains('hidden');
+      if (state.ready && visible) fit();
+    });
+  }
+</script>

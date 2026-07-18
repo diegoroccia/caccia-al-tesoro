@@ -1,0 +1,46 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { Printer } from 'lucide-astro';
+
+interface Props {
+  entries: CollectionEntry<'stations'>[];
+}
+const { entries } = Astro.props;
+
+// Renderizza il corpo Markdown (lettera pergamena) di ogni stazione.
+const scrolls = await Promise.all(
+  entries.map(async (entry) => ({ data: entry.data, Content: (await render(entry)).Content })),
+);
+---
+
+<section id="tab-print" class="tab-content hidden space-y-6">
+  <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl no-print flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div>
+      <h3 class="font-bold text-yellow-400">Bereit zum Drucken!</h3>
+      <p class="text-xs text-slate-400">Klicke auf den Button, um die Pergament-Rollen für das Spiel direkt auszudrucken.</p>
+    </div>
+    <button id="print-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg transition">
+      <Printer /> Jetzt drucken
+    </button>
+  </div>
+
+  <div class="space-y-8">
+    {scrolls.map(({ data, Content }) => (
+      <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+        <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">{data.questLabel}</span>
+        <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">{data.questTitle}</h2>
+        <div class="font-serif italic leading-relaxed mb-6 text-lg">
+          <Content />
+        </div>
+        <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+          <span>👾 Verwandlung: {data.transformation}</span>
+          <span>Zielort: {data.targetLocation}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+</script>

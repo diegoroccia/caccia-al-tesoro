@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import GuideTab from '../components/GuideTab.astro';
+import MapViewer from '../components/MapViewer.astro';
+import PlayTab from '../components/PlayTab.astro';
+import PrintTab from '../components/PrintTab.astro';
+import { Sword, Volume2, BookOpen, Smartphone, Map, Printer } from 'lucide-astro';
+
+// Stazioni ordinate per campo `order`. Fonte di verità del contenuto della caccia.
+const entries = (await getCollection('stations')).sort((a, b) => a.data.order - b.data.order);
+const stations = entries.map((e) => ({
+  emoji: e.data.emoji,
+  title: e.data.title,
+  subtitle: e.data.subtitle,
+  riddle: e.data.riddle,
+  action: e.data.action,
+  spoiler: e.data.spoiler,
+  sound: e.data.sound,
+}));
+
+const tabs = [
+  { id: 'guide', label: 'Guida GM (IT)', Icon: BookOpen },
+  { id: 'play', label: 'Spiel (DE)', Icon: Smartphone },
+  { id: 'map', label: 'Karte', Icon: Map },
+  { id: 'print', label: 'Drucken (DE)', Icon: Printer },
+];
+---
+
+<Layout>
+  <header class="bg-slate-900 border-b-4 border-yellow-500 p-4 shadow-lg no-print">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-yellow-500 p-2 rounded-lg text-slate-950 animate-bounce">
+          <Sword class="w-8 h-8" />
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-yellow-400 font-scroll tracking-wider">MONSTER BOY</h1>
+          <p class="text-xs text-slate-400 font-game">Cursed Kingdom Hunt</p>
+        </div>
+      </div>
+      <button id="test-audio-btn" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-600 text-sm transition">
+        <Volume2 class="w-4 h-4 text-emerald-400 animate-pulse" />
+        <span>Test Audio Synth</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="max-w-4xl w-full mx-auto p-4 flex gap-2 no-print">
+    {tabs.map(({ id, label, Icon }) => (
+      <button
+        data-tab={id}
+        id={`btn-${id}`}
+        class:list={[
+          'tab-btn flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200',
+          id === 'guide' ? 'bg-yellow-500 text-slate-950 border-yellow-700' : 'bg-slate-800 text-slate-400 border-slate-950',
+        ]}
+      >
+        <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><Icon class="w-4 h-4" /> {label}</span>
+      </button>
+    ))}
+  </nav>
+
+  <main class="max-w-4xl w-full mx-auto px-4 flex-1">
+    <GuideTab />
+    <MapViewer />
+    <PlayTab stations={stations} />
+    <PrintTab entries={entries} />
+  </main>
+
+  <footer class="mt-auto border-t border-slate-900 pt-8 text-center text-xs text-slate-500 no-print">
+    <p>Monster Boy - Schnitzeljagd • Upsala Familienzentrum Berlin</p>
+  </footer>
+</Layout>
+
+<script>
+  import { testAudio } from '../scripts/audio';
+
+  const ACTIVE = ['bg-yellow-500', 'text-slate-950', 'border-yellow-700'];
+  const INACTIVE = ['bg-slate-800', 'text-slate-400', 'border-slate-950'];
+
+  function switchTab(tabId: string) {
+    document.querySelectorAll<HTMLElement>('.tab-content').forEach((tab) => tab.classList.add('hidden'));
+    document.getElementById(`tab-${tabId}`)?.classList.remove('hidden');
+
+    document.querySelectorAll<HTMLElement>('.tab-btn').forEach((btn) => {
+      btn.classList.remove(...ACTIVE);
+      btn.classList.add(...INACTIVE);
+    });
+    const activeBtn = document.getElementById(`btn-${tabId}`);
+    activeBtn?.classList.remove(...INACTIVE);
+    activeBtn?.classList.add(...ACTIVE);
+
+    // Notifica i componenti (es. la mappa deve dimensionarsi solo da visibile).
+    document.dispatchEvent(new CustomEvent('tabshown', { detail: tabId }));
+  }
+
+  document.querySelectorAll<HTMLElement>('.tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab!));
+  });
+
+  document.getElementById('test-audio-btn')?.addEventListener('click', testAudio);
+</script>
