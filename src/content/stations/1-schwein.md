@@ -4,10 +4,10 @@ emoji: "🐷"
 title: "DAS SCHNÜFFELNDE SCHWEIN"
 subtitle: "AKTIVIERE DIE VERWANDLUNG"
 riddle: |
-  "Es ist eine große Festung aus Holz und Stein,
-  um hochzuklettern musst du mutig sein.
-  Mit Strickleitern geht es ganz schnell hinauf,
-  und eine silberne Zunge rutscht du jubelnd herab im Dauerlauf!"
+  "Es steht eine bunte Burg zum Klettern bereit,
+  um hochzukommen musst du mutig sein, wie weit!
+  Über Leitern und Stufen geht es flink hinauf,
+  und auf einer Rutsche saust du jubelnd herab im Dauerlauf!"
 action: "Die Kinder laufen wie kleine Schweinchen und schnüffeln nach Spuren in Richtung Kletterschloss."
 spoiler: "Ziel: Kletterschloss / Rutsche"
 sound:
@@ -24,9 +24,9 @@ Um den Zauber zu brechen und das Gold zu finden, müsst ihr die geheimen Runen f
 
 Hier ist euer erstes Rätsel:
 
-**Es ist eine große Festung aus Holz und Stein,
-um hochzuklettern musst du mutig sein.
-Mit Strickleitern geht es ganz schnell hinauf,
-und eine silberne Zunge rutscht du jubelnd herab im Dauerlauf!**
+**Es steht eine bunte Burg zum Klettern bereit,
+um hochzukommen musst du mutig sein, wie weit!
+Über Leitern und Stufen geht es flink hinauf,
+und auf einer Rutsche saust du jubelnd herab im Dauerlauf!**
 
 Sucht auf der Karte, aktiviert eure *Schweine-Nase* und rennt schnüffelnd zum Ziel!"

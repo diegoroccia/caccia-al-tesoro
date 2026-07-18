@@ -5,13 +5,13 @@ title: "WIEDER MENSCHEN!"
 subtitle: "DER ZAUBER IST GEBROCHEN!"
 riddle: |
   "Die Reise ist zu Ende, die Karte ist bereit,
-  doch für die goldene Truhe ist es jetzt an der Zeit.
-  Geht ein paar Schritte zurück auf eurer Spur,
-  nah an den Käfig der finsteren Natur.
-  Gleich daneben steht eine kleine Truhe aus braunem Holz,
-  öffnet sie gemeinsam und seid auf euren Sieg stolz!"
-action: "Die Kinder werden wieder zu Menschen! Sie rennen zur Holztruhe neben dem Käfig, um das echte Gold zu finden."
-spoiler: "Ziel: Holztruhe neben dem Käfig"
+  doch für den goldenen Schatz ist es jetzt an der Zeit.
+  Schaut oben links, dort steht ganz allein
+  ein runder Brunnen aus altem Stein.
+  Ganz nah daneben, das ist doch klar,
+  wartet die Schatztruhe – wunderbar!"
+action: "Die Kinder werden wieder zu Menschen! Sie laufen quer über die Karte nach oben links zum runden Brunnen und finden die Schatztruhe gleich daneben."
+spoiler: "Ziel: Brunnen oben links (Truhe daneben)"
 sound:
   - { freq: 523.25, type: square, duration: 0.15, delay: 0 }
   - { freq: 659.25, type: square, duration: 0.15, delay: 150 }
@@ -20,18 +20,18 @@ sound:
 questLabel: "FINALE QUEST"
 questTitle: "👦 FINALE: Wieder Menschen werden!"
 transformation: "Wieder Kinder (Sieg!)"
-targetLocation: "Holztruhe neben dem Käfig"
+targetLocation: "Brunnen oben links auf der Karte"
 ---
 
 "Ihr seid auf der Bühne! Der Zauber von Nabu ist gebrochen, ihr seid wieder **Menschen**!
 
-Jetzt könnt ihr die echte Schatztruhe öffnen. Aber wo ist sie?
+Jetzt könnt ihr die echte Schatztruhe finden. Aber wo ist sie?
 
 **Die Reise ist zu Ende, die Karte ist bereit,
-doch für die goldene Truhe ist es jetzt an der Zeit.
-Geht ein paar Schritte zurück auf eurer Spur,
-nah an den Käfig der finsteren Natur.
-Gleich daneben steht eine kleine Truhe aus braunem Holz,
-öffnet sie gemeinsam und seid auf euren Sieg stolz!**
+doch für den goldenen Schatz ist es jetzt an der Zeit.
+Schaut oben links, dort steht ganz allein
+ein runder Brunnen aus altem Stein.
+Ganz nah daneben, das ist doch klar,
+wartet die Schatztruhe – wunderbar!**
 
-Sucht die Truhe und feiert den Geburtstag!"
+Lauft zum Brunnen und feiert den Geburtstag!"

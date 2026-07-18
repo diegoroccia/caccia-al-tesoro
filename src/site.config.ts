@@ -114,12 +114,13 @@ export const siteConfig: SiteConfig = {
       '📍 <strong>Casa Conigli + Tappeto:</strong> Recinto coniglietti + trampolino.',
       "📍 <strong>La Prigione:</strong> La gabbia di legno nell'angolo in basso a sinistra.",
       '📍 <strong>Il Palco:</strong> Il teatro di pietra sullo sfondo.',
+      '📍 <strong>Il Pozzo:</strong> In alto a sinistra sulla mappa (in realtà la siepe rotonda disegnata come pozzo).',
     ],
     prepTitle: 'Preparazione',
     prep: [
       '📜 Stampa le <strong>Pergamene in tedesco</strong> dal tab "Drucken".',
       "🪢 Nascondi gli indizi nei 5 punti corrispondenti prima dell'inizio della festa.",
-      '🍬 <strong>Il Tesoro:</strong> Un bauletto con dolci e monete nascosto vicino alla <strong>Gabbia/Prigione</strong>.',
+      '🍬 <strong>Il Tesoro:</strong> Un bauletto con dolci e monete nascosto <strong>accanto al Pozzo</strong> (la siepe rotonda in alto a sinistra).',
     ],
     routeTitle: 'IL NUOVO PERCORSO (6 ANNI)',
     route: [
@@ -128,6 +129,7 @@ export const siteConfig: SiteConfig = {
       { emoji: '🐸', bg: 'bg-emerald-500 text-slate-950', title: '3. La Barca ➡️ Tappeto Elastico Conigli', desc: "Trasformazione in <strong>Rana (Frog)</strong>: saltano a piedi uniti. Devono saltare sul tappeto elastico per afferrare l'indizio appeso!" },
       { emoji: '🦁', bg: 'bg-amber-600 text-white', title: '4. Casa Conigli ➡️ La Prigione (Gabbia)', desc: 'Trasformazione in <strong>Leone (Lion)</strong>: corrono ruggendo con gli artigli.' },
       { emoji: '🐉', bg: 'bg-red-600 text-white', title: '5. La Prigione ➡️ Il Palco', desc: 'Trasformazione in <strong>Drago (Dragon)</strong>: volano spiegando le ali fino al tempio di pietra.' },
+      { emoji: '👦', bg: 'bg-yellow-500 text-slate-950', title: '6. Il Palco ➡️ Il Pozzo (Tesoro)', desc: "L'incantesimo è spezzato: tornano <strong>bambini</strong> e corrono in alto a sinistra al <strong>Pozzo</strong>, dove accanto trovano il bauletto del tesoro." },
     ],
   },
 };
