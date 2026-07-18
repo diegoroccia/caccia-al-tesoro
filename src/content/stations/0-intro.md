@@ -23,8 +23,15 @@ targetLocation: "Sammelpunkt (Tisch)"
 
 "Willkommen, tapfere Helden!
 
-Der böse Zauberer **Nabu** hat einen finsteren Fluch über euch gelegt und den goldenen Schatz versteckt.
+Vor langer Zeit lag mitten in der endlosen Wüste ein prächtiges **Königreich aus Sand**. Dort wurde ein sagenhafter goldener Schatz gehütet, und alle Kinder lebten glücklich und frei.
 
-Um den Fluch zu brechen, müsst ihr die geheimen **Runen** finden. Bei jeder Rune verwandelt ihr euch in ein mächtiges Tier!
+Doch eines dunklen Nachts kam der finstere Zauberer **Nabu**. Mit einem bösen Fluch verwandelte er die mutigen Kinder in kleine Tiere und versteckte den goldenen Schatz tief im Reich – zwischen Pyramiden, Schiffen und alten Ruinen.
 
-Seid ihr bereit? Dann kann die große Schatzjagd beginnen!"
+Aber jeder Fluch hat eine Schwäche! Überall im Königreich hat Nabu heimlich seine geheimen **Runen** verloren. Wer alle Runen findet, bricht den Zauber Stück für Stück.
+
+Bei jeder Rune verwandelt ihr euch in ein neues, mächtiges Tier – vom schnüffelnden Schweinchen über die flinke Schlange und den springenden Frosch bis zum brüllenden Löwen und dem feuerspeienden Drachen!
+
+Nur wer mutig, schnell und schlau ist, folgt der Spur bis zum Ende und findet den goldenen Schatz zurück.
+
+Seid ihr bereit, Helden? Dann hebt die Hände, ruft euren lautesten Schlachtruf – und lasst die große Schatzjagd beginnen!"
+
