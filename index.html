@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Boy - Schnitzeljagd Upsala</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap');
+        
+        .font-game {
+            font-family: 'Press Start 2P', monospace;
+        }
+        .font-scroll {
+            font-family: 'Cinzel', serif;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #0b1528;
+            color: #f3f4f6;
+        }
+        /* Stile speciale per la stampa delle pergamene */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-scroll {
+                border: 3px double #8b5a2b !important;
+                background: #fff8eb !important;
+                color: #3e2723 !important;
+                page-break-inside: avoid;
+                margin-bottom: 2rem !important;
+                box-shadow: none !important;
+            }
+        }
+        .scroll-bg {
+            background-color: #fcf4e3;
+            background-image: radial-gradient(#f3e5c8 1px, transparent 0), radial-gradient(#f3e5c8 1px, #fcf4e3 1px);
+            background-size: 8px 8px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+    <!-- Header di Gioco -->
+    <header class="bg-slate-900 border-b-4 border-yellow-500 p-4 shadow-lg no-print">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-yellow-500 p-2 rounded-lg text-slate-950 animate-bounce">
+                    <i data-lucide="sword" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-yellow-400 font-scroll tracking-wider">MONSTER BOY</h1>
+                    <p class="text-xs text-slate-400 font-game">Cursed Kingdom Hunt</p>
+                </div>
+            </div>
+            <!-- Audio Indicator -->
+            <button onclick="testAudio()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full border border-slate-600 text-sm transition">
+                <i data-lucide="volume-2" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
+                <span>Test Audio Synth</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Menu di Navigazione Tab -->
+    <nav class="max-w-4xl w-full mx-auto p-4 flex gap-2 no-print">
+        <button onclick="switchTab('guide')" id="btn-guide" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-yellow-500 text-slate-950 border-yellow-700">
+            <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="book-open" class="w-4 h-4"></i> Guida GM (IT)</span>
+        </button>
+        <button onclick="switchTab('play')" id="btn-play" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950">
+            <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="smartphone" class="w-4 h-4"></i> Spiel (DE)</span>
+        </button>
+        <button onclick="switchTab('print')" id="btn-print" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950">
+            <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="printer" class="w-4 h-4"></i> Drucken (DE)</span>
+        </button>
+    </nav>
+
+    <!-- Contenuto Principale -->
+    <main class="max-w-4xl w-full mx-auto px-4 flex-1">
+
+        <!-- ================= TAB GUIDA GM ================= -->
+        <section id="tab-guide" class="tab-content space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold text-yellow-400 mb-4 flex items-center gap-2 font-scroll">
+                    <i data-lucide="compass"></i> MAPPA E PREPARAZIONE (ITALIANO)
+                </h2>
+                <p class="text-slate-300 leading-relaxed mb-4 text-sm sm:text-base">
+                    Benvenuto Game Master! Questa caccia al tesoro è pensata per far divertire i bambini in <strong>tedesco</strong>, mentre tu gestisci la sequenza dal telefono in italiano. 
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-emerald-400 mb-2 flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Punti Chiave Cortile</h3>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li>📍 <strong>Start (Tavolo):</strong> Punto di raduno iniziale dei piccoli eroi.</li>
+                            <li>📍 <strong>Castello Scivolo:</strong> La fortezza con lo scivolo argentato.</li>
+                            <li>📍 <strong>La Barca:</strong> La barca di legno posizionata nella sabbia.</li>
+                            <li>📍 <strong>Casa Conigli + Tappeto:</strong> Recinto coniglietti + trampolino.</li>
+                            <li>📍 <strong>La Prigione:</strong> La gabbia di legno nell'angolo in basso a sinistra.</li>
+                            <li>📍 <strong>Il Palco:</strong> Il teatro di pietra sullo sfondo.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-bold text-amber-400 mb-2 flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Preparazione</h3>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li>📜 Stampa le <strong>Pergamene in tedesco</strong> dal tab "Drucken".</li>
+                            <li>🪢 Nascondi gli indizi nei 5 punti corrispondenti prima dell'inizio della festa.</li>
+                            <li>🍬 <strong>Il Tesoro:</strong> Un bauletto con dolci e monete nascosto vicino alla <strong>Gabbia/Prigione</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl">
+                <h3 class="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2 font-scroll">
+                    <i data-lucide="milestone"></i> IL NUOVO PERCORSO (6 ANNI)
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+                        <div class="bg-pink-600 text-white rounded-full p-2.5 text-center shrink-0">
+                            <span class="font-game text-xs">🐷</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-100">1. Tavolo Festa ➡️ Castello Scivolo</h4>
+                            <p class="text-xs sm:text-sm text-slate-400">Maledizione del <strong>Maiale (Pig)</strong>: corrono annusando l'aria.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+                        <div class="bg-green-600 text-white rounded-full p-2.5 text-center shrink-0">
+                            <span class="font-game text-xs">🐍</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-100">2. Castello Scivolo ➡️ La Barca</h4>
+                            <p class="text-xs sm:text-sm text-slate-400">Trasformazione in <strong>Serpente (Snake)</strong>: scivolano e strisciano pancia a terra per pochi metri fino alla barca.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+                        <div class="bg-emerald-500 text-slate-950 rounded-full p-2.5 text-center shrink-0">
+                            <span class="font-game text-xs">🐸</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-100">3. La Barca ➡️ Tappeto Elastico Conigli</h4>
+                            <p class="text-xs sm:text-sm text-slate-400">Trasformazione in <strong>Rana (Frog)</strong>: saltano a piedi uniti. Devono saltare sul tappeto elastico per afferrare l'indizio appeso!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+                        <div class="bg-amber-600 text-white rounded-full p-2.5 text-center shrink-0">
+                            <span class="font-game text-xs">🦁</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-100">4. Casa Conigli ➡️ La Prigione (Gabbia)</h4>
+                            <p class="text-xs sm:text-sm text-slate-400">Trasformazione in <strong>Leone (Lion)</strong>: corrono ruggendo con gli artigli.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 p-3 bg-slate-800/50 rounded-xl border border-slate-800">
+                        <div class="bg-red-600 text-white rounded-full p-2.5 text-center shrink-0">
+                            <span class="font-game text-xs">🐉</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-100">5. La Prigione ➡️ Il Palco</h4>
+                            <p class="text-xs sm:text-sm text-slate-400">Trasformazione in <strong>Drago (Dragon)</strong>: volano spiegando le ali fino al tempio di pietra.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB GIOCA MOBILE ================= -->
+        <section id="tab-play" class="tab-content hidden space-y-6">
+            
+            <div class="bg-slate-900 border-2 border-yellow-500 p-4 rounded-2xl shadow-xl flex justify-between items-center no-print">
+                <button onclick="prevStep()" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <div class="text-center">
+                    <span class="text-xs font-game text-yellow-500">QUEST STEP</span>
+                    <h3 id="quest-number" class="font-bold font-scroll text-lg">1 VON 6</h3>
+                </div>
+                <button onclick="nextStep()" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 text-slate-900/40 pointer-events-none select-none">
+                    <i data-lucide="gamepad-2" class="w-48 h-48"></i>
+                </div>
+
+                <div class="relative z-10 space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div id="quest-emoji" class="text-5xl bg-slate-800 p-4 rounded-2xl border-2 border-slate-700 animate-pulse">
+                            🐷
+                        </div>
+                        <div>
+                            <span id="quest-subtitle" class="text-xs font-game text-rose-500">VERWANDLUNG AKTIV</span>
+                            <h2 id="quest-title" class="text-2xl font-bold text-slate-100 font-scroll">DAS SCHNÜFFELNDE SCHWEIN</h2>
+                        </div>
+                    </div>
+
+                    <!-- Audio Synth -->
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="font-bold text-sm text-yellow-400">Retro-Soundeffekt (8-bit)</p>
+                            <p class="text-xs text-slate-400">Drücken, um das magische Geräusch abzuspielen!</p>
+                        </div>
+                        <button id="audio-play-btn" onclick="playCurrentSynth()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 px-4 py-2 rounded-lg font-bold flex items-center gap-2 shadow-lg transition">
+                            <i data-lucide="play" class="w-4 h-4"></i> Abspielen!
+                        </button>
+                    </div>
+
+                    <!-- Riddle Box -->
+                    <div class="bg-amber-50/10 p-5 rounded-xl border border-amber-500/20">
+                        <p class="text-xs font-game text-amber-400 mb-2">📜 RAETSEL ZUM VORLESEN:</p>
+                        <p id="quest-riddle" class="italic text-lg text-amber-100 leading-relaxed font-serif whitespace-pre-line">
+                            "Es ist eine große Festung..."
+                        </p>
+                    </div>
+
+                    <!-- Action Box -->
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                        <p class="font-bold text-sm text-emerald-400 flex items-center gap-2">
+                            <i data-lucide="activity" class="w-4 h-4"></i> Was die Kinder tun müssen:
+                        </p>
+                        <p id="quest-action" class="text-sm text-slate-300 mt-2">
+                            Die Kinder laufen wie kleine Schweinchen und schnüffeln nach Spuren.
+                        </p>
+                    </div>
+
+                    <!-- Spoiler -->
+                    <div class="pt-4 border-t border-slate-900">
+                        <button onclick="toggleSpoiler()" class="text-xs text-slate-500 hover:text-slate-400 underline">
+                            Zielort anzeigen/verstecken (Spoiler)
+                        </button>
+                        <p id="quest-spoiler" class="hidden text-sm font-bold text-emerald-500 mt-2">
+                            Ziel: Kletterschloss
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Runes -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <h4 class="text-xs font-game text-slate-400 mb-3 text-center">FREIGESCHALTETE RUNEN</h4>
+                <div class="flex justify-around items-center">
+                    <span id="badge-0" class="text-2xl filter grayscale opacity-30 transition">🐷</span>
+                    <span id="badge-1" class="text-2xl filter grayscale opacity-30 transition">🐍</span>
+                    <span id="badge-2" class="text-2xl filter grayscale opacity-30 transition">🐸</span>
+                    <span id="badge-3" class="text-2xl filter grayscale opacity-30 transition">🦁</span>
+                    <span id="badge-4" class="text-2xl filter grayscale opacity-30 transition">🐉</span>
+                    <span id="badge-5" class="text-2xl filter grayscale opacity-30 transition">👦</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB STAMPA PERGAMENE ================= -->
+        <section id="tab-print" class="tab-content hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl no-print flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div>
+                    <h3 class="font-bold text-yellow-400">Bereit zum Drucken!</h3>
+                    <p class="text-xs text-slate-400">Klicke auf den Button, um die Pergament-Rollen für das Spiel direkt auszudrucken.</p>
+                </div>
+                <button onclick="window.print()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg transition">
+                    <i data-lucide="printer"></i> Jetzt drucken
+                </button>
+            </div>
+
+            <!-- Pergamene reali -->
+            <div class="space-y-8">
+                <!-- Start Quest -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">START QUEST</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">📜 QUEST 1: Der Schweine-Zauber</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Achtung, Helden! Der böse Zauberer Nabu hat euch in <strong>Schweinchen</strong> verwandelt!<br>
+                        Um den Zauber zu brechen und das Gold zu finden, müsst ihr die geheimen Runen finden.<br><br>
+                        Hier ist euer erstes Rätsel:<br><br>
+                        <strong>Es ist eine große Festung aus Holz und Stein,<br>
+                        um hochzuklettern musst du mutig sein.<br>
+                        Mit Strickleitern geht es ganz schnell hinauf,<br>
+                        und eine silberne Zunge rutscht du jubelnd herab im Dauerlauf!</strong><br><br>
+                        Sucht auf der Karte, aktiviert eure <em>Schweine-Nase</em> und rennt schnüffelnd zum Ziel!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Schweinchen (Schnüffeln)</span>
+                        <span>Zielort: Kletterschloss / Rutsche</span>
+                    </div>
+                </div>
+
+                <!-- Runa 1 -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">RUNE 1</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">🐍 QUEST 2: Die Schlangen-Rutsche</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Großartig! Ihr habt die erste Rune gefunden. Nun werdet ihr zu lautlosen <strong>Schlangen</strong>!<br><br>
+                        Hier ist euer nächster Pfad:<br><br>
+                        <strong>Sucht ein Gefährt, das sehr besonders ist,<br>
+                        das auf dem Sandmeer seine Segel hisst.<br>
+                        Es hat keine Räder und fährt auf keiner Straße,<br>
+                        es liegt fest im Sande in riesigem Maße!<br>
+                        Sucht ganz nah an seinem großen Steuerrad...</strong><br><br>
+                        <strong>🎮 SCHLANGEN-PROBE:</strong> Klettert hoch, rutscht wie eine Schlange sischend (<em>ssssss</em>) hinunter und kriecht ganz leise im Sand zum Schiff direkt nebenan!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Schlange (Leises Kriechen)</span>
+                        <span>Zielort: Das Holzschiff im Sand</span>
+                    </div>
+                </div>
+
+                <!-- Runa 2 -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">RUNE 2</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">🐸 QUEST 3: Der Sprung des Frosches</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Ahoi, Matrosen! Die Schlange hat das Schiff erobert! Nun verwandelt ihr euch in flinke <strong>Frösche</strong>!<br><br>
+                        Hört gut zu:<br><br>
+                        <strong>In der Mitte des Reiches gibt es ein Haus so fein,<br>
+                        dort ziehen friedliche kleine Tiere ein.<br>
+                        Sie haben lange Ohren und hoppeln sehr weit,<br>
+                        und gleich daneben steht etwas für Hüpf-Bereitschaft bereit:<br>
+                        Ein magischer Kreis, der dich in den Himmel treibt,<br>
+                        wenn du darauf springst, kein Fuß am Boden bleibt!</strong><br><br>
+                        <strong>🎮 FROSCH-PROBE:</strong> Hüpft mit großen Sprüngen auf beiden Beinen wie echte Frösche (*quak-quak*) zum magischen Trampolin! Ihr müsst hochspringen, um die nächste Rune zu greifen, die dort oben hängt!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Frosch (Super-Sprung)</span>
+                        <span>Zielort: Trampolin neben dem Kaninchengehege</span>
+                    </div>
+                </div>
+
+                <!-- Runa 3 -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">RUNE 3</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">🦁 QUEST 4: Der Löwen-Angriff</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Unglaublich! Ihr seid Meister-Springer! Nun wachst eure Stärke: Ihr werdet zu wilden <strong>Löwen</strong>!<br><br>
+                        Euer Ziel:<br><br>
+                        <strong>Im Königreich gibt es einen dunklen Ort,<br>
+                        aus Holzgittern gebaut, weit weg von jedem Wort.<br>
+                        Ein schattiges Gefängnis, ein finsteres Verlies,<br>
+                        das der böse Zauberer Nabu für euch verließ.<br>
+                        Es liegt unten links auf eurer Karte versteckt,<br>
+                        befreit schnell jeden, der dort erschreckt!</strong><br><br>
+                        <strong>🎮 LÖWEN-PROBE:</strong> Rennt wie stolze Löwen zum Holzkäfig, zeigt eure Krallen und brüllt so laut ihr könnt, um die Wachen zu vertreiben!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Löwe (Starkes Brüllen)</span>
+                        <span>Zielort: Holzkäfig / Gefängnis</span>
+                    </div>
+                </div>
+
+                <!-- Runa 4 -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">RUNE 4</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">🐉 QUEST 5: Der Drachenflug</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Ihr habt das Gefängnis gestürmt! Unglaublich! Nun schaltet ihr die stärkste Form frei: den <strong>Drachen</strong>!<br><br>
+                        Hier ist der letzte Tempel:<br><br>
+                        <strong>Es ist ein großes Theater ganz aus grauem Stein,<br>
+                        wo Musik erklingt und alle fröhlich schrein.<br>
+                        Es hat große Stufen, die nach oben gehn,<br>
+                        wo Sänger und Tänzer im Scheinwerferlicht stehn.<br>
+                        Sucht hinter den Säulen, die dort majestätisch ragen!</strong><br><br>
+                        <strong>🎮 DRACHEN-PROBE:</strong> Breitet eure Arme aus wie riesige Flügel und 'fliegt' schnell zum großen Steintheater!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Drache (Fliegen)</span>
+                        <span>Zielort: Die Steinbühne</span>
+                    </div>
+                </div>
+
+                <!-- Runa 5 / Finale -->
+                <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
+                    <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">FINALE QUEST</span>
+                    <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">👦 FINALE: Wieder Menschen werden!</h2>
+                    <p class="font-serif italic leading-relaxed mb-6 text-lg">
+                        "Ihr seid auf der Bühne! Der Zauber von Nabu ist gebrochen, ihr seid wieder <strong>Menschen</strong>!<br><br>
+                        Jetzt könnt ihr die echte Schatztruhe öffnen. Aber wo ist sie?<br><br>
+                        <strong>Die Reise ist zu Ende, die Karte ist bereit,<br>
+                        doch für die goldene Truhe ist es jetzt an der Zeit.<br>
+                        Geht ein paar Schritte zurück auf eurer Spur,<br>
+                        nah an den Käfig der finsteren Natur.<br>
+                        Gleich daneben steht eine kleine Truhe aus braunem Holz,<br>
+                        öffnet sie gemeinsam und seid auf euren Sieg stolz!</strong><br><br>
+                        Sucht die Truhe und feiert den Geburtstag!"
+                    </p>
+                    <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
+                        <span>👾 Verwandlung: Wieder Kinder (Sieg!)</span>
+                        <span>Zielort: Holztruhe neben dem Käfig</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer statico no-print -->
+    <footer class="mt-auto border-t border-slate-900 pt-8 text-center text-xs text-slate-500 no-print">
+        <p>Monster Boy - Schnitzeljagd • Upsala Familienzentrum Berlin</p>
+    </footer>
+
+    <!-- JavaScript di Gioco -->
+    <script>
+        // Stato dell'applicazione
+        let currentStep = 0;
+        const steps = [
+            {
+                emoji: "🐷",
+                title: "DAS SCHNÜFFELNDE SCHWEIN",
+                subtitle: "AKTIVIERE DIE VERWANDLUNG",
+                riddle: '"Es ist eine große Festung aus Holz und Stein,\num hochzuklettern musst du mutig sein.\nMit Strickleitern geht es ganz schnell hinauf,\nund eine silberne Zunge rutscht du jubelnd herab im Dauerlauf!"',
+                action: "Die Kinder laufen wie kleine Schweinchen und schnüffeln nach Spuren in Richtung Kletterschloss.",
+                spoiler: "Ziel: Kletterschloss / Rutsche"
+            },
+            {
+                emoji: "🐍",
+                title: "DIE SCHLANGEN-RUTSCHE",
+                subtitle: "AKTIVIERE DIE VERWANDLUNG",
+                riddle: '"Sucht ein Gefährt, das sehr besonders ist,\ndas auf dem Sandmeer seine Segel hisst.\nEs hat keine Räder und fährt auf keiner Straße,\nes liegt fest im Sande in riesigem Maße!\nSucht ganz nah an seinem großen Steuerrad..."',
+                action: "Die Kinder werden zu Schlangen! Sie rutschen sischend herab und kriechen ganz kurz im Sand zum Boot direkt daneben.",
+                spoiler: "Ziel: Das Holzschiff im Sand"
+            },
+            {
+                emoji: "🐸",
+                title: "DER MAGISCHE SPRUNG",
+                subtitle: "AKTIVIERE DIE VERWANDLUNG",
+                riddle: '"In der Mitte des Reiches gibt es ein Haus so fein,\ndort ziehen friedliche kleine Tiere ein.\nSie haben lange Ohren und hoppeln sehr weit,\nund gleich daneben steht etwas für Hüpf-Bereitschaft bereit:\nEin magischer Kreis, der dich in den Himmel treibt,\nwenn du darauf springst, kein Fuß am Boden bleibt!"',
+                action: "Die Kinder springen wie Frösche zum Trampolin. Dort müssen sie hüpfen, um die nächste Rune an einem Ast zu greifen!",
+                spoiler: "Ziel: Trampolin neben dem Kaninchengehege"
+            },
+            {
+                emoji: "🦁",
+                title: "DER LÖWEN-ANGRIFF",
+                subtitle: "AKTIVIERE DIE VERWANDLUNG",
+                riddle: '"Im Königreich gibt es einen dunklen Ort,\naus Holzgittern gebaut, weit weg von jedem Wort.\nEin schattiges Gefängnis, ein finsteres Verlies,\ndas der böse Zauberer Nabu für euch verließ.\nEs liegt unten links auf eurer Karte versteckt,\nbefreit schnell jeden, der dort erschreckt!"',
+                action: "Sie werden zu wilden Löwen! Sie rennen brüllend zum Holzkäfig, um die bösen Geister zu vertreiben.",
+                spoiler: "Ziel: Holzkäfig / Gefängnis"
+            },
+            {
+                emoji: "🐉",
+                title: "DER DRACHENFLUG",
+                subtitle: "AKTIVIERE DIE VERWANDLUNG",
+                riddle: '"Es ist ein großes Theater ganz aus grauem Stein,\nwo Musik erklingt und alle fröhlich schrein.\nEs hat große Stufen, die nach oben gehn,\nwo Sänger und Tänzer im Scheinwerferlicht stehn.\nSucht hinter den Säulen, die dort majestätisch ragen!"',
+                action: "Sie verwandeln sich in fliegende Drachen und 'fliegen' mit ausgebreiteten Armen zur großen Steinbühne.",
+                spoiler: "Ziel: Die Steinbühne"
+            },
+            {
+                emoji: "👦",
+                title: "WIEDER MENSCHEN!",
+                subtitle: "DER ZAUBER IST GEBROCHEN!",
+                riddle: '"Die Reise ist zu Ende, die Karte ist bereit,\ndoch für die goldene Truhe ist es jetzt an der Zeit.\nGeht ein paar Schritte zurück auf eurer Spur,\nnah an den Käfig der finsteren Natur.\nGleich daneben steht eine kleine Truhe aus braunem Holz,\nöffnet sie gemeinsam und seid auf euren Sieg stolz!"',
+                action: "Die Kinder werden wieder zu Menschen! Sie rennen zur Holztruhe neben dem Käfig, um das echte Gold zu finden.",
+                spoiler: "Ziel: Holztruhe neben dem Käfig"
+            }
+        ];
+
+        // Sintetizzatore Web Audio API per Effetti Retro 8-bit
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSynthTone(freq, type, duration, slideTo) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = type || 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            if (slideTo) {
+                osc.frequency.exponentialRampToValueAtTime(slideTo, audioCtx.currentTime + duration);
+            }
+
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Test Sound
+        function testAudio() {
+            playSynthTone(523.25, 'square', 0.1); // C5
+            setTimeout(() => playSynthTone(659.25, 'square', 0.1), 100); // E5
+            setTimeout(() => playSynthTone(783.99, 'square', 0.3), 200); // G5
+        }
+
+        // Suoni personalizzati per ciascun animale!
+        function playCurrentSynth() {
+            switch(currentStep) {
+                case 0: // Maiale: Suono profondo oscillante
+                    playSynthTone(150, 'triangle', 0.3, 100);
+                    setTimeout(() => playSynthTone(140, 'triangle', 0.3, 90), 150);
+                    break;
+                case 1: // Serpente: Pitch sweep discendente sibilante
+                    playSynthTone(1200, 'sawtooth', 0.4, 300);
+                    break;
+                case 2: // Rana: Salto tipo "Boing"
+                    playSynthTone(200, 'sine', 0.3, 600);
+                    break;
+                case 3: // Leone: Rumore ruggito a bassa frequenza
+                    playSynthTone(100, 'sawtooth', 0.5, 40);
+                    break;
+                case 4: // Drago: Fuoco laser epico
+                    playSynthTone(800, 'triangle', 0.5, 100);
+                    setTimeout(() => playSynthTone(1000, 'sawtooth', 0.2, 50), 100);
+                    break;
+                case 5: // Umano / Vittoria Fanfara RPG!
+                    playSynthTone(523.25, 'square', 0.15); // C5
+                    setTimeout(() => playSynthTone(659.25, 'square', 0.15), 150); // E5
+                    setTimeout(() => playSynthTone(783.99, 'square', 0.15), 300); // G5
+                    setTimeout(() => playSynthTone(1046.50, 'square', 0.5), 450); // C6
+                    break;
+            }
+        }
+
+        // Navigazione dei Tab
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Cambia stile bottoni
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = "flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950";
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = "flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-yellow-500 text-slate-950 border-yellow-700";
+        }
+
+        // Navigazione degli step interattivi della Quest
+        function updateStepUI() {
+            const step = steps[currentStep];
+            document.getElementById('quest-number').innerText = `${currentStep + 1} VON ${steps.length}`;
+            document.getElementById('quest-emoji').innerText = step.emoji;
+            document.getElementById('quest-title').innerText = step.title;
+            document.getElementById('quest-subtitle').innerText = step.subtitle;
+            document.getElementById('quest-riddle').innerText = step.riddle;
+            document.getElementById('quest-action').innerText = step.action;
+            document.getElementById('quest-spoiler').innerText = step.spoiler;
+            
+            // Nascondi sempre lo spoiler all'inizio dello step
+            document.getElementById('quest-spoiler').classList.add('hidden');
+
+            // Aggiorna le medaglie
+            for (let i = 0; i < steps.length; i++) {
+                const badge = document.getElementById(`badge-${i}`);
+                if (i <= currentStep) {
+                    badge.classList.remove('grayscale', 'opacity-30');
+                    badge.classList.add('scale-110');
+                } else {
+                    badge.classList.add('grayscale', 'opacity-30');
+                    badge.classList.remove('scale-110');
+                }
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateStepUI();
+                playSynthTone(600, 'sine', 0.1, 900); // Suono click progresso
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStepUI();
+                playSynthTone(400, 'sine', 0.1, 200); // Suono click indietro
+            }
+        }
+
+        function toggleSpoiler() {
+            const spoiler = document.getElementById('quest-spoiler');
+            spoiler.classList.toggle('hidden');
+        }
+
+        // Inizializzazione icone e UI all'avvio
+        window.onload = function() {
+            lucide.createIcons();
+            updateStepUI();
+        };
+    </script>
+</body>
+</html>
