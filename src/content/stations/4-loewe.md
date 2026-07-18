@@ -1,34 +1,34 @@
 ---
 order: 4
 emoji: "🦁"
-title: "DER LÖWEN-ANGRIFF"
-subtitle: "AKTIVIERE DIE VERWANDLUNG"
+title: "L'ATTACCO DEL LEONE"
+subtitle: "ATTIVA LA TRASFORMAZIONE"
 riddle: |
-  "Im Königreich gibt es einen dunklen Ort,
-  aus Holzgittern gebaut, weit weg von jedem Wort.
-  Ein schattiges Gefängnis, ein finsteres Verlies,
-  das der böse Zauberer Nabu für euch verließ.
-  Es liegt unten links auf eurer Karte versteckt,
-  befreit schnell jeden, der dort erschreckt!"
-action: "Sie werden zu wilden Löwen! Sie rennen brüllend zum Holzkäfig, um die bösen Geister zu vertreiben."
-spoiler: "Ziel: Holzkäfig / Gefängnis"
+  "Nel regno c'è un luogo oscuro,
+  costruito con grate di legno, lontano da ogni parola.
+  Una prigione ombrosa, un tetro sotterraneo,
+  che il malvagio mago Nabu ha lasciato per voi.
+  Si trova nascosto in basso a sinistra sulla vostra mappa,
+  liberate subito chiunque sia rimasto spaventato lì!"
+action: "Diventano leoni selvaggi! Corrono ruggendo verso la gabbia di legno per scacciare gli spiriti malvagi."
+spoiler: "Obiettivo: Gabbia di legno / Prigione"
 sound:
   - { freq: 100, type: sawtooth, duration: 0.5, slideTo: 40, delay: 0 }
-questLabel: "RUNE 3"
-questTitle: "🦁 QUEST 4: Der Löwen-Angriff"
-transformation: "Löwe (Starkes Brüllen)"
-targetLocation: "Holzkäfig / Gefängnis"
+questLabel: "RUNA 3"
+questTitle: "🦁 MISSIONE 4: L'Attacco del Leone"
+transformation: "Leone (Ruggito Potente)"
+targetLocation: "Gabbia di legno / Prigione"
 ---
 
-"Unglaublich! Ihr seid Meister-Springer! Nun wachst eure Stärke: Ihr werdet zu wilden **Löwen**!
+"Incredibile! Siete maestri del salto! Ora la vostra forza cresce: diventate **leoni** selvaggi!
 
-Euer Ziel:
+Il vostro obiettivo:
 
-**Im Königreich gibt es einen dunklen Ort,
-aus Holzgittern gebaut, weit weg von jedem Wort.
-Ein schattiges Gefängnis, ein finsteres Verlies,
-das der böse Zauberer Nabu für euch verließ.
-Es liegt unten links auf eurer Karte versteckt,
-befreit schnell jeden, der dort erschreckt!**
+**Nel regno c'è un luogo oscuro,
+costruito con grate di legno, lontano da ogni parola.
+Una prigione ombrosa, un tetro sotterraneo,
+che il malvagio mago Nabu ha lasciato per voi.
+Si trova nascosto in basso a sinistra sulla vostra mappa,
+liberate subito chiunque sia rimasto spaventato lì!**
 
-**🎮 LÖWEN-PROBE:** Rennt wie stolze Löwen zum Holzkäfig, zeigt eure Krallen und brüllt so laut ihr könnt, um die Wachen zu vertreiben!"
+**🎮 PROVA DEL LEONE:** Correte come leoni fieri verso la gabbia di legno, mostrate i vostri artigli e ruggite più forte che potete per scacciare le guardie!"

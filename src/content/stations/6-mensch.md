@@ -1,37 +1,37 @@
 ---
 order: 6
 emoji: "👦"
-title: "WIEDER MENSCHEN!"
-subtitle: "DER ZAUBER IST GEBROCHEN!"
+title: "DI NUOVO UMANI!"
+subtitle: "LA MALEDIZIONE È SPEZZATA!"
 riddle: |
-  "Die Reise ist zu Ende, die Karte ist bereit,
-  doch für den goldenen Schatz ist es jetzt an der Zeit.
-  Schaut oben links, dort steht ganz allein
-  ein runder Brunnen aus altem Stein.
-  Ganz nah daneben, das ist doch klar,
-  wartet die Schatztruhe – wunderbar!"
-action: "Die Kinder werden wieder zu Menschen! Sie laufen quer über die Karte nach oben links zum runden Brunnen und finden die Schatztruhe gleich daneben."
-spoiler: "Ziel: Brunnen oben links (Truhe daneben)"
+  "Il viaggio è finito, la mappa è pronta,
+  ma per il tesoro d'oro è adesso il momento.
+  Guardate in alto a sinistra, lì sta da solo
+  un pozzo rotondo di antica pietra.
+  Proprio lì accanto, è chiaro ormai,
+  aspetta la cassetta del tesoro – meraviglioso!"
+action: "I bambini tornano ad essere umani! Corrono attraverso tutta la mappa verso il pozzo rotondo in alto a sinistra e trovano la cassetta del tesoro proprio accanto."
+spoiler: "Obiettivo: Pozzo in alto a sinistra (cassetta del tesoro accanto)"
 sound:
   - { freq: 523.25, type: square, duration: 0.15, delay: 0 }
   - { freq: 659.25, type: square, duration: 0.15, delay: 150 }
   - { freq: 783.99, type: square, duration: 0.15, delay: 300 }
   - { freq: 1046.5, type: square, duration: 0.5, delay: 450 }
-questLabel: "FINALE QUEST"
-questTitle: "👦 FINALE: Wieder Menschen werden!"
-transformation: "Wieder Kinder (Sieg!)"
-targetLocation: "Brunnen oben links auf der Karte"
+questLabel: "MISSIONE FINALE"
+questTitle: "👦 FINALE: Tornare umani!"
+transformation: "Di nuovo bambini (Vittoria!)"
+targetLocation: "Pozzo in alto a sinistra sulla mappa"
 ---
 
-"Ihr seid auf der Bühne! Der Zauber von Nabu ist gebrochen, ihr seid wieder **Menschen**!
+"Siete sul palco! La maledizione di Nabu è spezzata, siete di nuovo **umani**!
 
-Jetzt könnt ihr die echte Schatztruhe finden. Aber wo ist sie?
+Ora potete trovare la vera cassetta del tesoro. Ma dov'è?
 
-**Die Reise ist zu Ende, die Karte ist bereit,
-doch für den goldenen Schatz ist es jetzt an der Zeit.
-Schaut oben links, dort steht ganz allein
-ein runder Brunnen aus altem Stein.
-Ganz nah daneben, das ist doch klar,
-wartet die Schatztruhe – wunderbar!**
+**Il viaggio è finito, la mappa è pronta,
+ma per il tesoro d'oro è adesso il momento.
+Guardate in alto a sinistra, lì sta da solo
+un pozzo rotondo di antica pietra.
+Proprio lì accanto, è chiaro ormai,
+aspetta la cassetta del tesoro – meraviglioso!**
 
-Lauft zum Brunnen und feiert den Geburtstag!"
+Correte al pozzo e festeggiate il compleanno!"

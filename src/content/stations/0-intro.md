@@ -1,37 +1,37 @@
 ---
 order: 0
 emoji: "🧙"
-title: "DER FLUCH VON NABU"
-subtitle: "DIE SCHATZJAGD BEGINNT"
+title: "LA MALEDIZIONE DI NABU"
+subtitle: "LA CACCIA AL TESORO INIZIA"
 riddle: |
-  "Willkommen, tapfere Helden!
-  Der böse Zauberer Nabu hat einen Fluch über euch gelegt
-  und den goldenen Schatz tief versteckt.
-  Um den Fluch zu brechen, müsst ihr die geheimen Runen finden.
-  Bei jeder Rune verwandelt ihr euch in ein mächtiges Tier!
-  Seid ihr bereit? Dann kann die große Jagd beginnen!"
-action: "Versammelt euch alle am Tisch und hört gespannt zu! Gleich beginnt die erste Verwandlung."
-spoiler: "Nächste Verwandlung: Schweinchen 🐷"
+  "Benvenuti, coraggiosi eroi!
+  Il malvagio mago Nabu ha lanciato una maledizione su di voi
+  e ha nascosto il tesoro d'oro in un luogo segreto.
+  Per spezzare la maledizione, dovete trovare le rune segrete.
+  Ad ogni runa vi trasformerete in un potente animale!
+  Siete pronti? Allora la grande caccia può iniziare!"
+action: "Radunatevi tutti al tavolo e ascoltate con attenzione! Sta per iniziare la prima trasformazione."
+spoiler: "Prossima trasformazione: Maialino 🐷"
 sound:
   - { freq: 440, type: sawtooth, duration: 0.4, slideTo: 110, delay: 0 }
   - { freq: 330, type: square, duration: 0.4, slideTo: 80, delay: 250 }
 questLabel: "INTRO"
-questTitle: "🧙 Der Fluch von Nabu"
-transformation: "Der Fluch beginnt"
-targetLocation: "Sammelpunkt (Tisch)"
+questTitle: "🧙 La Maledizione di Nabu"
+transformation: "La maledizione inizia"
+targetLocation: "Punto di raccolta (Tavolo)"
 ---
 
-"Willkommen, tapfere Helden!
+"Benvenuti, coraggiosi eroi!
 
-Vor langer Zeit lag mitten in der endlosen Wüste ein prächtiges **Königreich aus Sand**. Dort wurde ein sagenhafter goldener Schatz gehütet, und alle Kinder lebten glücklich und frei.
+Tanto tempo fa, nel mezzo dell'infinito deserto, sorgeva uno splendido **Regno di Sabbia**. Lì era custodito un leggendario tesoro d'oro, e tutti i bambini vivevano felici e liberi.
 
-Doch eines dunklen Nachts kam der finstere Zauberer **Nabu**. Mit einem bösen Fluch verwandelte er die mutigen Kinder in kleine Tiere und versteckte den goldenen Schatz tief im Reich – zwischen Pyramiden, Schiffen und alten Ruinen.
+Ma una notte buia arrivò il sinistro mago **Nabu**. Con una maledizione malvagia trasformò i bambini coraggiosi in piccoli animali e nascose il tesoro d'oro nel profondo del regno – tra piramidi, navi e antiche rovine.
 
-Aber jeder Fluch hat eine Schwäche! Überall im Königreich hat Nabu heimlich seine geheimen **Runen** verloren. Wer alle Runen findet, bricht den Zauber Stück für Stück.
+Ma ogni maledizione ha una debolezza! In tutto il regno Nabu ha perso segretamente le sue **rune** segrete. Chi trova tutte le rune, spezza l'incantesimo pezzo per pezzo.
 
-Bei jeder Rune verwandelt ihr euch in ein neues, mächtiges Tier – vom schnüffelnden Schweinchen über die flinke Schlange und den springenden Frosch bis zum brüllenden Löwen und dem feuerspeienden Drachen!
+Ad ogni runa vi trasformerete in un nuovo e potente animale – dal maialino che annusa al serpente agile, dalla rana saltellante al leone ruggente e al drago che sputa fuoco!
 
-Nur wer mutig, schnell und schlau ist, folgt der Spur bis zum Ende und findet den goldenen Schatz zurück.
+Solo chi è coraggioso, veloce e astuto seguirà la pista fino in fondo e troverà il tesoro d'oro.
 
-Seid ihr bereit, Helden? Dann hebt die Hände, ruft euren lautesten Schlachtruf – und lasst die große Schatzjagd beginnen!"
+Siete pronti, eroi? Allora alzate le mani, gridate il vostro urlo di battaglia più forte – e che inizi la grande caccia al tesoro!"
 

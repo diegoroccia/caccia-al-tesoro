@@ -1,32 +1,32 @@
 ---
 order: 1
 emoji: "🐷"
-title: "DAS SCHNÜFFELNDE SCHWEIN"
-subtitle: "AKTIVIERE DIE VERWANDLUNG"
+title: "IL MAIALE ANNUSATORE"
+subtitle: "ATTIVA LA TRASFORMAZIONE"
 riddle: |
-  "Es steht eine bunte Burg zum Klettern bereit,
-  um hochzukommen musst du mutig sein, wie weit!
-  Über Leitern und Stufen geht es flink hinauf,
-  und auf einer Rutsche saust du jubelnd herab im Dauerlauf!"
-action: "Die Kinder laufen wie kleine Schweinchen und schnüffeln nach Spuren in Richtung Kletterschloss."
-spoiler: "Ziel: Kletterschloss / Rutsche"
+  "C'è un castello colorato pronto per arrampicarsi,
+  per salire in cima devi essere coraggioso, quanto in alto!
+  Su scale e gradini si sale veloci,
+  e su uno scivolo si scende esultando a tutta velocità!"
+action: "I bambini corrono come maialini e annusano le tracce in direzione del castello da arrampicata."
+spoiler: "Obiettivo: Castello da arrampicata / Scivolo"
 sound:
   - { freq: 150, type: triangle, duration: 0.3, slideTo: 100, delay: 0 }
   - { freq: 140, type: triangle, duration: 0.3, slideTo: 90, delay: 150 }
-questLabel: "START QUEST"
-questTitle: "🐷 QUEST 1: Der Schweine-Zauber"
-transformation: "Schweinchen (Schnüffeln)"
-targetLocation: "Kletterschloss / Rutsche"
+questLabel: "INIZIA MISSIONE"
+questTitle: "🐷 MISSIONE 1: L'Incantesimo del Maiale"
+transformation: "Maialino (Annusare)"
+targetLocation: "Castello da arrampicata / Scivolo"
 ---
 
-"Achtung, Helden! Der böse Zauberer Nabu hat euch in **Schweinchen** verwandelt!
-Um den Zauber zu brechen und das Gold zu finden, müsst ihr die geheimen Runen finden.
+"Attenzione, eroi! Il malvagio mago Nabu vi ha trasformati in **maialini**!
+Per rompere l'incantesimo e trovare l'oro, dovete trovare le rune segrete.
 
-Hier ist euer erstes Rätsel:
+Ecco il vostro primo indovinello:
 
-**Es steht eine bunte Burg zum Klettern bereit,
-um hochzukommen musst du mutig sein, wie weit!
-Über Leitern und Stufen geht es flink hinauf,
-und auf einer Rutsche saust du jubelnd herab im Dauerlauf!**
+**C'è un castello colorato pronto per arrampicarsi,
+per salire in cima devi essere coraggioso, quanto in alto!
+Su scale e gradini si sale veloci,
+e su uno scivolo si scende esultando a tutta velocità!**
 
-Sucht auf der Karte, aktiviert eure *Schweine-Nase* und rennt schnüffelnd zum Ziel!"
+Cercate sulla mappa, attivate il vostro *naso da maiale* e correte annusando verso la meta!"

@@ -1,34 +1,34 @@
 ---
 order: 3
 emoji: "🐸"
-title: "DER MAGISCHE SPRUNG"
-subtitle: "AKTIVIERE DIE VERWANDLUNG"
+title: "IL SALTO MAGICO"
+subtitle: "ATTIVA LA TRASFORMAZIONE"
 riddle: |
-  "In der Mitte des Reiches gibt es ein Haus so fein,
-  dort ziehen friedliche kleine Tiere ein.
-  Sie haben lange Ohren und hoppeln sehr weit,
-  und gleich daneben steht etwas für Hüpf-Bereitschaft bereit:
-  Ein magischer Kreis, der dich in den Himmel treibt,
-  wenn du darauf springst, kein Fuß am Boden bleibt!"
-action: "Die Kinder springen wie Frösche zum Trampolin. Dort müssen sie hüpfen, um die nächste Rune an einem Ast zu greifen!"
-spoiler: "Ziel: Trampolin neben dem Kaninchengehege"
+  "Nel mezzo del regno c'è una casa così bella,
+  dove entrano piccoli animali pacifici.
+  Hanno lunghe orecchie e saltano molto lontano,
+  e proprio accanto c'è qualcosa pronto per saltare:
+  Un cerchio magico che ti spinge verso il cielo,
+  quando ci salti sopra, nessun piede rimane a terra!"
+action: "I bambini saltano come rane verso il trampolino. Lì devono saltare per afferrare la prossima runa appesa a un ramo!"
+spoiler: "Obiettivo: Trampolino vicino al recinto dei conigli"
 sound:
   - { freq: 200, type: sine, duration: 0.3, slideTo: 600, delay: 0 }
-questLabel: "RUNE 2"
-questTitle: "🐸 QUEST 3: Der Sprung des Frosches"
-transformation: "Frosch (Super-Sprung)"
-targetLocation: "Trampolin neben dem Kaninchengehege"
+questLabel: "RUNA 2"
+questTitle: "🐸 MISSIONE 3: Il Salto della Rana"
+transformation: "Rana (Super-Salto)"
+targetLocation: "Trampolino vicino al recinto dei conigli"
 ---
 
-"Ahoi, Matrosen! Die Schlange hat das Schiff erobert! Nun verwandelt ihr euch in flinke **Frösche**!
+"Ahoi, marinai! Il serpente ha conquistato la nave! Ora vi trasformate in agili **rane**!
 
-Hört gut zu:
+Ascoltate bene:
 
-**In der Mitte des Reiches gibt es ein Haus so fein,
-dort ziehen friedliche kleine Tiere ein.
-Sie haben lange Ohren und hoppeln sehr weit,
-und gleich daneben steht etwas für Hüpf-Bereitschaft bereit:
-Ein magischer Kreis, der dich in den Himmel treibt,
-wenn du darauf springst, kein Fuß am Boden bleibt!**
+**Nel mezzo del regno c'è una casa così bella,
+dove entrano piccoli animali pacifici.
+Hanno lunghe orecchie e saltano molto lontano,
+e proprio accanto c'è qualcosa pronto per saltare:
+Un cerchio magico che ti spinge verso il cielo,
+quando ci salti sopra, nessun piede rimane a terra!**
 
-**🎮 FROSCH-PROBE:** Hüpft mit großen Sprüngen auf beiden Beinen wie echte Frösche (*quak-quak*) zum magischen Trampolin! Ihr müsst hochspringen, um die nächste Rune zu greifen, die dort oben hängt!"
+**🎮 PROVA DELLA RANA:** Saltate con grandi balzi su entrambe le gambe come vere rane (*cra-cra*) verso il trampolino magico! Dovete saltare in alto per afferrare la prossima runa appesa lassù!"

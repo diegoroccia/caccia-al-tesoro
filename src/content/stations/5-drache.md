@@ -1,33 +1,33 @@
 ---
 order: 5
 emoji: "🐉"
-title: "DER DRACHENFLUG"
-subtitle: "AKTIVIERE DIE VERWANDLUNG"
+title: "IL VOLO DEL DRAGO"
+subtitle: "ATTIVA LA TRASFORMAZIONE"
 riddle: |
-  "Es ist ein großes Theater ganz aus grauem Stein,
-  wo Musik erklingt und alle fröhlich schrein.
-  Es hat große Stufen, die nach oben gehn,
-  wo Sänger und Tänzer im Scheinwerferlicht stehn.
-  Sucht hinter den Säulen, die dort majestätisch ragen!"
-action: "Sie verwandeln sich in fliegende Drachen und 'fliegen' mit ausgebreiteten Armen zur großen Steinbühne."
-spoiler: "Ziel: Die Steinbühne"
+  "C'è un grande teatro tutto di pietra grigia,
+  dove risuona la musica e tutti gridano di gioia.
+  Ha grandi gradini che salgono verso l'alto,
+  dove cantanti e ballerini brillano sotto i riflettori.
+  Cercate dietro le colonne che svettano maestose!"
+action: "Si trasformano in draghi volanti e 'volano' con le braccia aperte verso il grande palco di pietra."
+spoiler: "Obiettivo: Il palco di pietra"
 sound:
   - { freq: 800, type: triangle, duration: 0.5, slideTo: 100, delay: 0 }
   - { freq: 1000, type: sawtooth, duration: 0.2, slideTo: 50, delay: 100 }
-questLabel: "RUNE 4"
-questTitle: "🐉 QUEST 5: Der Drachenflug"
-transformation: "Drache (Fliegen)"
-targetLocation: "Die Steinbühne"
+questLabel: "RUNA 4"
+questTitle: "🐉 MISSIONE 5: Il Volo del Drago"
+transformation: "Drago (Volare)"
+targetLocation: "Il palco di pietra"
 ---
 
-"Ihr habt das Gefängnis gestürmt! Unglaublich! Nun schaltet ihr die stärkste Form frei: den **Drachen**!
+"Avete espugnato la prigione! Incredibile! Ora sbloccate la forma più potente: il **drago**!
 
-Hier ist der letzte Tempel:
+Ecco l'ultimo tempio:
 
-**Es ist ein großes Theater ganz aus grauem Stein,
-wo Musik erklingt und alle fröhlich schrein.
-Es hat große Stufen, die nach oben gehn,
-wo Sänger und Tänzer im Scheinwerferlicht stehn.
-Sucht hinter den Säulen, die dort majestätisch ragen!**
+**C'è un grande teatro tutto di pietra grigia,
+dove risuona la musica e tutti gridano di gioia.
+Ha grandi gradini che salgono verso l'alto,
+dove cantanti e ballerini brillano sotto i riflettori.
+Cercate dietro le colonne che svettano maestose!**
 
-**🎮 DRACHEN-PROBE:** Breitet eure Arme aus wie riesige Flügel und 'fliegt' schnell zum großen Steintheater!"
+**🎮 PROVA DEL DRAGO:** Aprite le braccia come enormi ali e 'volate' veloci verso il grande teatro di pietra!"
