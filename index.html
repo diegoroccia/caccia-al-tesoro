@@ -77,6 +77,9 @@
         <button onclick="switchTab('play')" id="btn-play" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950">
             <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="smartphone" class="w-4 h-4"></i> Spiel (DE)</span>
         </button>
+        <button onclick="switchTab('map')" id="btn-map" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950">
+            <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="map" class="w-4 h-4"></i> Karte</span>
+        </button>
         <button onclick="switchTab('print')" id="btn-print" class="flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-slate-800 text-slate-400 border-slate-950">
             <span class="flex items-center justify-center gap-1 text-sm sm:text-base"><i data-lucide="printer" class="w-4 h-4"></i> Drucken (DE)</span>
         </button>
@@ -170,6 +173,27 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB MAPPA / KARTE ================= -->
+        <section id="tab-map" class="tab-content hidden space-y-4">
+            <div class="bg-slate-900 border-2 border-yellow-500 rounded-2xl shadow-xl overflow-hidden">
+                <div class="flex items-center justify-between p-3 border-b border-slate-800">
+                    <h2 class="text-lg font-bold text-yellow-400 flex items-center gap-2 font-scroll">
+                        <i data-lucide="map"></i> SCHATZKARTE
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <button onclick="mapZoom(0.8)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Zoom out"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                        <button onclick="mapZoom(1.25)" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Zoom in"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                        <button onclick="mapReset()" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-200" aria-label="Reset"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                <div id="map-viewport" class="relative w-full h-[70vh] overflow-hidden bg-slate-950 touch-none cursor-grab select-none">
+                    <img id="map-img" src="map.png" alt="Schatzkarte" draggable="false"
+                         class="absolute top-0 left-0 origin-top-left will-change-transform max-w-none pointer-events-none" />
+                </div>
+                <p class="text-center text-xs text-slate-500 p-2">Ziehen zum Verschieben · Mausrad / Kneifen zum Zoomen</p>
             </div>
         </section>
 
@@ -542,6 +566,11 @@
 
             const activeBtn = document.getElementById(`btn-${tabId}`);
             activeBtn.className = "flex-1 py-3 px-2 text-center rounded-xl font-bold border-b-4 transition duration-200 bg-yellow-500 text-slate-950 border-yellow-700";
+
+            // La mappa deve essere dimensionata solo quando è visibile
+            if (tabId === 'map') {
+                requestAnimationFrame(() => { if (!mapState.ready) mapFit(); else mapApply(); });
+            }
         }
 
         // Navigazione degli step interattivi della Quest
@@ -592,10 +621,136 @@
             spoiler.classList.toggle('hidden');
         }
 
+        // ===== Mappa: pan & zoom (mouse, touch, pinch) =====
+        const mapState = { scale: 1, minScale: 1, maxScale: 6, x: 0, y: 0, baseW: 0, baseH: 0, ready: false };
+
+        function mapClamp() {
+            const vp = document.getElementById('map-viewport');
+            if (!vp) return;
+            const w = mapState.baseW * mapState.scale;
+            const h = mapState.baseH * mapState.scale;
+            const vw = vp.clientWidth, vh = vp.clientHeight;
+            // Se l'immagine è più piccola del viewport la centriamo, altrimenti limitiamo il pan
+            mapState.x = w <= vw ? (vw - w) / 2 : Math.min(0, Math.max(vw - w, mapState.x));
+            mapState.y = h <= vh ? (vh - h) / 2 : Math.min(0, Math.max(vh - h, mapState.y));
+        }
+
+        function mapApply() {
+            const img = document.getElementById('map-img');
+            if (!img) return;
+            mapClamp();
+            img.style.transform = `translate(${mapState.x}px, ${mapState.y}px) scale(${mapState.scale})`;
+        }
+
+        function mapFit() {
+            const vp = document.getElementById('map-viewport');
+            const img = document.getElementById('map-img');
+            if (!vp || !img || !img.naturalWidth || !vp.clientWidth) return false;
+            // Scala di base: adatta l'immagine alla larghezza del viewport
+            const fit = vp.clientWidth / img.naturalWidth;
+            mapState.baseW = img.naturalWidth * fit;
+            mapState.baseH = img.naturalHeight * fit;
+            img.style.width = mapState.baseW + 'px';
+            img.style.height = mapState.baseH + 'px';
+            mapState.ready = true;
+            mapReset();
+            return true;
+        }
+
+        function mapInit() {
+            const vp = document.getElementById('map-viewport');
+            const img = document.getElementById('map-img');
+            if (!vp || !img) return;
+            // Il tab parte nascosto (clientWidth 0): il fit viene (ri)calcolato in switchTab.
+
+            // Zoom con rotellina, centrato sul cursore
+            vp.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const r = vp.getBoundingClientRect();
+                mapZoomAt(e.deltaY < 0 ? 1.15 : 0.87, e.clientX - r.left, e.clientY - r.top);
+            }, { passive: false });
+
+            // Pan con mouse
+            let dragging = false, lastX = 0, lastY = 0;
+            vp.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'touch') return; // gestito da touch handlers
+                dragging = true; lastX = e.clientX; lastY = e.clientY;
+                vp.style.cursor = 'grabbing'; vp.setPointerCapture(e.pointerId);
+            });
+            vp.addEventListener('pointermove', (e) => {
+                if (!dragging) return;
+                mapState.x += e.clientX - lastX; mapState.y += e.clientY - lastY;
+                lastX = e.clientX; lastY = e.clientY; mapApply();
+            });
+            const endDrag = () => { dragging = false; vp.style.cursor = 'grab'; };
+            vp.addEventListener('pointerup', endDrag);
+            vp.addEventListener('pointercancel', endDrag);
+
+            // Touch: pan a un dito, pinch a due dita
+            let pStart = null;
+            const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+            const mid = (t) => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+            vp.addEventListener('touchstart', (e) => {
+                const r = vp.getBoundingClientRect();
+                if (e.touches.length === 1) {
+                    pStart = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+                } else if (e.touches.length === 2) {
+                    const m = mid(e.touches);
+                    pStart = { mode: 'pinch', d: dist(e.touches), cx: m.x - r.left, cy: m.y - r.top };
+                }
+            }, { passive: false });
+            vp.addEventListener('touchmove', (e) => {
+                if (!pStart) return;
+                e.preventDefault();
+                if (pStart.mode === 'pan' && e.touches.length === 1) {
+                    mapState.x += e.touches[0].clientX - pStart.x;
+                    mapState.y += e.touches[0].clientY - pStart.y;
+                    pStart.x = e.touches[0].clientX; pStart.y = e.touches[0].clientY;
+                    mapApply();
+                } else if (pStart.mode === 'pinch' && e.touches.length === 2) {
+                    const d = dist(e.touches);
+                    mapZoomAt(d / pStart.d, pStart.cx, pStart.cy);
+                    pStart.d = d;
+                }
+            }, { passive: false });
+            vp.addEventListener('touchend', () => { pStart = null; });
+        }
+
+        // Zoom mantenendo fisso il punto (px,py) relativo al viewport
+        function mapZoomAt(factor, px, py) {
+            const prev = mapState.scale;
+            const next = Math.min(mapState.maxScale, Math.max(mapState.minScale, prev * factor));
+            if (next === prev) return;
+            const ratio = next / prev;
+            mapState.x = px - (px - mapState.x) * ratio;
+            mapState.y = py - (py - mapState.y) * ratio;
+            mapState.scale = next;
+            mapApply();
+        }
+
+        // Zoom dai bottoni: centrato sul viewport
+        function mapZoom(factor) {
+            const vp = document.getElementById('map-viewport');
+            if (!vp) return;
+            mapZoomAt(factor, vp.clientWidth / 2, vp.clientHeight / 2);
+        }
+
+        function mapReset() {
+            mapState.scale = 1;
+            mapState.x = 0; mapState.y = 0;
+            mapApply();
+        }
+
+        window.addEventListener('resize', () => {
+            const mapVisible = !document.getElementById('tab-map').classList.contains('hidden');
+            if (mapState.ready && mapVisible) mapFit();
+        });
+
         // Inizializzazione icone e UI all'avvio
         window.onload = function() {
             lucide.createIcons();
             updateStepUI();
+            mapInit();
         };
     </script>
 </body>
