@@ -1,6 +1,6 @@
 ---
-import { ChevronLeft, ChevronRight, Gamepad2, Play, Activity } from 'lucide-astro';
-import { siteConfig } from '../site.config';
+import { ChevronLeft, ChevronRight, Gamepad2, Play, Activity, Swords, RotateCcw } from 'lucide-astro';
+import { siteConfig, type CharacterStatus } from '../site.config';
 
 interface Tone {
   freq: number;
@@ -9,19 +9,27 @@ interface Tone {
   slideTo?: number;
   delay: number;
 }
+interface Challenge {
+  description: string;
+  onWin?: string;
+  onLose?: string;
+}
 interface StationData {
   emoji: string;
   title: string;
   subtitle: string;
   riddle: string;
   action: string;
-  spoiler: string;
+  target: string;
+  status?: string;
+  challenge?: Challenge;
   sound: Tone[];
 }
 interface Props {
   stations: StationData[];
+  statuses: CharacterStatus[];
 }
-const { stations } = Astro.props;
+const { stations, statuses } = Astro.props;
 const first = stations[0];
 const ui = siteConfig.ui;
 ---
@@ -37,6 +45,17 @@ const ui = siteConfig.ui;
     </div>
     <button id="quest-next" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300" aria-label="Weiter">
       <ChevronRight />
+    </button>
+  </div>
+
+  <!-- Banner status attivo: slot "forma" (dalla tappa) + slot "effetto" (dalla sfida). -->
+  <div id="status-banner" class="border-2 border-slate-700 bg-slate-900 p-4 rounded-2xl flex items-start justify-between gap-3 no-print">
+    <div class="min-w-0 flex-1">
+      <span class="text-[0.65rem] font-game text-slate-400 block mb-2">{ui.statusActiveLabel}</span>
+      <div id="status-chips" data-none={ui.statusNoneLabel} class="flex flex-col gap-2"></div>
+    </div>
+    <button id="status-reset" class="shrink-0 hidden text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1 bg-slate-800 px-2 py-1.5 rounded-lg border border-slate-700">
+      <RotateCcw class="w-3.5 h-3.5" /> {ui.statusResetLabel}
     </button>
   </div>
 
@@ -78,11 +97,23 @@ const ui = siteConfig.ui;
         <p id="quest-action" class="text-sm text-slate-300 mt-2">{first.action}</p>
       </div>
 
+      <!-- Box sfida: presente solo se la stazione ha `challenge`. -->
+      <div id="quest-challenge" class="hidden bg-indigo-500/10 p-4 rounded-xl border border-indigo-400/30">
+        <p class="text-xs font-game text-indigo-300 mb-2 flex items-center gap-2">
+          <Swords class="w-4 h-4" /> {ui.challengeLabel}
+        </p>
+        <p id="challenge-desc" class="text-sm text-slate-200 mb-3"></p>
+        <div class="flex gap-2">
+          <button id="challenge-win" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg transition">{ui.winButton}</button>
+          <button id="challenge-lose" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 rounded-lg transition">{ui.loseButton}</button>
+        </div>
+      </div>
+
       <div class="pt-4 border-t border-slate-900">
         <button id="quest-spoiler-btn" class="text-xs text-slate-500 hover:text-slate-400 underline">
           {ui.spoilerToggle}
         </button>
-        <p id="quest-spoiler" class="hidden text-sm font-bold text-emerald-500 mt-2">{first.spoiler}</p>
+        <p id="quest-spoiler" class="hidden text-sm font-bold text-emerald-500 mt-2">Obiettivo: {first.target}</p>
       </div>
     </div>
   </div>
@@ -97,17 +128,59 @@ const ui = siteConfig.ui;
   </div>
 
   <script type="application/json" id="stations-data" set:html={JSON.stringify(stations)} />
+  <script type="application/json" id="statuses-data" set:html={JSON.stringify(statuses)} />
 </section>
 
 <script>
   import { playSynthTone, playSequence, type Tone } from '../scripts/audio';
 
   // Stato del tab "Spiel".
-  type Station = { emoji: string; title: string; subtitle: string; riddle: string; action: string; spoiler: string; sound: Tone[] };
+  type Challenge = { description: string; onWin?: string; onLose?: string };
+  type Station = { emoji: string; title: string; subtitle: string; riddle: string; action: string; target: string; status?: string; challenge?: Challenge; sound: Tone[] };
+  type Status = { id: string; emoji: string; label: string; instruction: string; kind: 'form' | 'buff' | 'curse' };
 
   const dataEl = document.getElementById('stations-data');
   const steps: Station[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+  const statusEl = document.getElementById('statuses-data');
+  const statusList: Status[] = statusEl ? JSON.parse(statusEl.textContent || '[]') : [];
+  const statusById = new Map(statusList.map((s) => [s.id, s]));
+
   let currentStep = 0;
+
+  // Due slot indipendenti, entrambi persistiti (sopravvivono a un refresh):
+  // - formId: la "forma" del personaggio. La imposta la `status` della tappa all'arrivo,
+  //   oppure una sfida vinta che assegna uno status kind:'form'. È "sticky": resta finché
+  //   non viene sovrascritta.
+  // - effectId: l'effetto sfida (buff/curse), fino alla prossima sfida.
+  const FORM_KEY = 'schnitzeljagd:activeForm';
+  const EFFECT_KEY = 'schnitzeljagd:activeEffect';
+  let formId: string | null = null;
+  let effectId: string | null = null;
+  try {
+    formId = localStorage.getItem(FORM_KEY);
+    effectId = localStorage.getItem(EFFECT_KEY);
+  } catch {
+    formId = null;
+    effectId = null;
+  }
+  function persist(key: string, id: string | null) {
+    try {
+      if (id) localStorage.setItem(key, id);
+      else localStorage.removeItem(key);
+    } catch {
+      /* localStorage non disponibile: resta solo in-memory */
+    }
+  }
+  function setForm(id: string | null) {
+    formId = id;
+    persist(FORM_KEY, id);
+    renderStatusBanner();
+  }
+  function setEffect(id: string | null) {
+    effectId = id;
+    persist(EFFECT_KEY, id);
+    renderStatusBanner();
+  }
 
   function playCurrentSynth() {
     const s = steps[currentStep];
@@ -115,6 +188,37 @@ const ui = siteConfig.ui;
   }
 
   const $ = (id: string) => document.getElementById(id);
+
+  // Classi colore per tipo di status (chip nel banner).
+  const CHIP_TONE: Record<Status['kind'], string> = {
+    form: 'bg-sky-500/15 text-sky-100 border-sky-400/40',
+    buff: 'bg-emerald-500/15 text-emerald-100 border-emerald-400/40',
+    curse: 'bg-rose-500/15 text-rose-100 border-rose-400/40',
+  };
+
+  function chipHtml(s: Status): string {
+    return `<div class="flex items-center gap-2 rounded-lg border px-2 py-1.5 ${CHIP_TONE[s.kind]}"><span class="text-2xl shrink-0">${s.emoji}</span><span class="text-sm font-bold leading-tight">${s.instruction}</span></div>`;
+  }
+
+  function renderStatusBanner() {
+    const chips = $('status-chips');
+    const reset = $('status-reset');
+    if (!chips || !reset) return;
+
+    const active: Status[] = [];
+    const form = formId ? statusById.get(formId) : undefined;
+    const effect = effectId ? statusById.get(effectId) : undefined;
+    if (form) active.push(form);
+    if (effect) active.push(effect);
+
+    if (active.length) {
+      chips.innerHTML = active.map(chipHtml).join('');
+    } else {
+      chips.innerHTML = `<p class="text-sm font-bold text-slate-300">✨ ${chips.dataset.none || ''}</p>`;
+    }
+    // Reset agisce solo sull'effetto sfida (la forma è legata alla tappa).
+    reset.classList.toggle('hidden', !effect);
+  }
 
   function updateStepUI() {
     const step = steps[currentStep];
@@ -127,8 +231,24 @@ const ui = siteConfig.ui;
     $('quest-subtitle')!.innerText = step.subtitle;
     $('quest-riddle')!.innerText = step.riddle;
     $('quest-action')!.innerText = step.action;
-    $('quest-spoiler')!.innerText = step.spoiler;
+    $('quest-spoiler')!.innerText = `Obiettivo: ${step.target}`;
     $('quest-spoiler')!.classList.add('hidden');
+
+    // La tappa, se dichiara una `status`, imposta (sovrascrive) la forma all'arrivo.
+    // Se non la dichiara, la forma "sticky" resta invariata.
+    if (step.status) setForm(step.status);
+    else renderStatusBanner();
+
+    // Box sfida: mostrato solo se la tappa ne ha una.
+    const challengeBox = $('quest-challenge');
+    if (challengeBox) {
+      if (step.challenge) {
+        $('challenge-desc')!.innerText = step.challenge.description;
+        challengeBox.classList.remove('hidden');
+      } else {
+        challengeBox.classList.add('hidden');
+      }
+    }
 
     for (let i = 0; i < steps.length; i++) {
       const badge = $(`badge-${i}`);
@@ -140,6 +260,35 @@ const ui = siteConfig.ui;
     }
   }
 
+  // Esito sfida → applica lo status indicato instradandolo nello slot giusto per `kind`:
+  // uno status kind:'form' cambia la forma (nuova trasformazione), buff/curse l'effetto.
+  // Un esito senza status azzera solo l'effetto (la forma resta).
+  function applyOutcome(id?: string) {
+    if (!id) {
+      setEffect(null);
+      return;
+    }
+    const s = statusById.get(id);
+    if (!s) return;
+    if (s.kind === 'form') setForm(id);
+    else setEffect(id);
+  }
+
+  function resolveChallenge(outcome: 'win' | 'lose') {
+    const step = steps[currentStep];
+    if (!step?.challenge) return;
+    applyOutcome(outcome === 'win' ? step.challenge.onWin : step.challenge.onLose);
+    if (outcome === 'win') {
+      playSequence([
+        { freq: 523, type: 'square', duration: 0.1, delay: 0 },
+        { freq: 659, type: 'square', duration: 0.1, delay: 100 },
+        { freq: 784, type: 'square', duration: 0.2, delay: 200 },
+      ]);
+    } else {
+      playSequence([{ freq: 200, type: 'sawtooth', duration: 0.4, slideTo: 70, delay: 0 }]);
+    }
+  }
+
   $('quest-prev')?.addEventListener('click', () => {
     if (currentStep > 0) { currentStep--; updateStepUI(); playSynthTone(400, 'sine', 0.1, 200); }
   });
@@ -148,6 +297,9 @@ const ui = siteConfig.ui;
   });
   $('quest-spoiler-btn')?.addEventListener('click', () => $('quest-spoiler')?.classList.toggle('hidden'));
   $('audio-play-btn')?.addEventListener('click', playCurrentSynth);
+  $('challenge-win')?.addEventListener('click', () => resolveChallenge('win'));
+  $('challenge-lose')?.addEventListener('click', () => resolveChallenge('lose'));
+  $('status-reset')?.addEventListener('click', () => setEffect(null));
 
   updateStepUI();
 </script>

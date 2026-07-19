@@ -8,6 +8,10 @@ interface Props {
 }
 const { entries } = Astro.props;
 const ui = siteConfig.ui;
+const statusById = new Map(siteConfig.statuses.map((s) => [s.id, s]));
+
+// Risolve un esito sfida in testo leggibile per la pergamena.
+const outcomeText = (id?: string) => (id ? statusById.get(id)?.instruction ?? id : ui.challengeNoEffect);
 
 // Renderizza il corpo Markdown (lettera pergamena) di ogni stazione.
 const scrolls = await Promise.all(
@@ -30,13 +34,21 @@ const scrolls = await Promise.all(
     {scrolls.map(({ data, Content }) => (
       <div class="print-scroll scroll-bg text-slate-900 p-8 rounded-xl shadow-2xl border-4 border-amber-900 relative">
         <span class="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-amber-900 opacity-60">{data.questLabel}</span>
-        <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">{data.questTitle}</h2>
+        <h2 class="text-2xl font-bold font-scroll text-amber-950 border-b-2 border-amber-900/30 pb-2 mb-4">{data.emoji} {data.title}</h2>
         <div class="font-serif italic leading-relaxed mb-6 text-lg">
           <Content />
         </div>
+        {data.challenge && (
+          <div class="print-challenge border border-dashed border-amber-900/50 rounded-lg p-3 mb-6 text-amber-950">
+            <p class="text-xs font-bold uppercase tracking-widest mb-1">{ui.challengeLabel}</p>
+            <p class="text-sm mb-2">{data.challenge.description}</p>
+            <p class="text-xs"><strong>✅ {ui.challengeWinPrefix}:</strong> {outcomeText(data.challenge.onWin)}</p>
+            <p class="text-xs"><strong>❌ {ui.challengeLosePrefix}:</strong> {outcomeText(data.challenge.onLose)}</p>
+          </div>
+        )}
         <div class="border-t border-amber-900/20 pt-2 flex justify-between text-xs font-mono text-amber-900">
-          <span>👾 Verwandlung: {data.transformation}</span>
-          <span>Zielort: {data.targetLocation}</span>
+          <span>{data.status ? `${statusById.get(data.status)?.emoji ?? ''} ${statusById.get(data.status)?.label ?? ''}`.trim() : ''}</span>
+          <span>Zielort: {data.target}</span>
         </div>
       </div>
     ))}

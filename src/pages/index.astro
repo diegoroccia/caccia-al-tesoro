@@ -16,7 +16,9 @@ const stations = entries.map((e) => ({
   subtitle: e.data.subtitle,
   riddle: e.data.riddle,
   action: e.data.action,
-  spoiler: e.data.spoiler,
+  target: e.data.target,
+  status: e.data.status,
+  challenge: e.data.challenge,
   sound: e.data.sound,
 }));
 
@@ -65,7 +67,7 @@ const tabs = [
   <main class="max-w-4xl w-full mx-auto px-4 flex-1">
     <GuideTab />
     <MapViewer />
-    <PlayTab stations={stations} />
+    <PlayTab stations={stations} statuses={siteConfig.statuses} />
     <PrintTab entries={entries} />
   </main>
 

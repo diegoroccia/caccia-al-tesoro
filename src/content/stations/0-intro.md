@@ -11,14 +11,11 @@ riddle: |
   Ad ogni runa vi trasformerete in un potente animale!
   Siete pronti? Allora la grande caccia può iniziare!"
 action: "Radunatevi tutti al tavolo e ascoltate con attenzione! Sta per iniziare la prima trasformazione."
-spoiler: "Prossima trasformazione: Maialino 🐷"
+target: "Punto di raccolta (Tavolo)"
 sound:
   - { freq: 440, type: sawtooth, duration: 0.4, slideTo: 110, delay: 0 }
   - { freq: 330, type: square, duration: 0.4, slideTo: 80, delay: 250 }
 questLabel: "INTRO"
-questTitle: "🧙 La Maledizione di Nabu"
-transformation: "La maledizione inizia"
-targetLocation: "Punto di raccolta (Tavolo)"
 ---
 
 "Benvenuti, coraggiosi eroi!

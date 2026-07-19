@@ -13,6 +13,25 @@ export interface RouteStep {
   desc: string;
 }
 
+/**
+ * Uno "status" del personaggio: effetto attivo tra una sfida e l'altra.
+ * Il catalogo è la fonte unica; le sfide delle stazioni lo referenziano per `id`.
+ */
+export interface CharacterStatus {
+  id: string;
+  emoji: string;
+  label: string; // etichetta breve (es. "Gamba sola")
+  instruction: string; // cosa fare mentre lo status è attivo
+  /**
+   * Canale + colore del banner:
+   * - 'form'  → la "forma" del personaggio (trasformazione), impostata dalla tappa
+   * - 'buff'  → vantaggio (verde), esito positivo di una sfida
+   * - 'curse' → penalità (rosso), esito negativo di una sfida
+   * Forma ed effetto (buff/curse) sono due slot indipendenti e coesistono.
+   */
+  kind: 'form' | 'buff' | 'curse';
+}
+
 export interface GuideConfig {
   heading: string;
   intro: string;
@@ -63,7 +82,22 @@ export interface SiteConfig {
     printButton: string;
     mapTitle: string;
     mapHint: string;
+    // Meccanica sfide/status (tab "Spiel" + pergamene)
+    challengeLabel: string; // titolo box sfida
+    winButton: string; // etichetta bottone vittoria
+    loseButton: string; // etichetta bottone sconfitta
+    statusActiveLabel: string; // titolo banner status
+    statusNoneLabel: string; // testo quando nessuno status è attivo
+    statusResetLabel: string; // bottone azzera status
+    challengeWinPrefix: string; // pergamena: "Se vinci:"
+    challengeLosePrefix: string; // pergamena: "Se perdi:"
+    challengeNoEffect: string; // esito senza status ("nessun effetto")
   };
+  /**
+   * Catalogo status del personaggio. Opzionale: se vuoto, la meccanica
+   * sfide/status resta silente (banner nascosto, nessuna sfida mostrata).
+   */
+  statuses: CharacterStatus[];
   guide: GuideConfig;
 }
 
@@ -101,7 +135,32 @@ export const siteConfig: SiteConfig = {
     printButton: 'Jetzt drucken',
     mapTitle: 'SCHATZKARTE',
     mapHint: 'Ziehen zum Verschieben · Mausrad / Kneifen zum Zoomen',
+    challengeLabel: '🎲 SFIDA',
+    winButton: 'Vinta ✅',
+    loseButton: 'Persa ❌',
+    statusActiveLabel: 'STATUS ATTIVO',
+    statusNoneLabel: 'Nessuno status — liberi!',
+    statusResetLabel: 'Azzera',
+    challengeWinPrefix: 'Se vinci',
+    challengeLosePrefix: 'Se perdi',
+    challengeNoEffect: 'nessun effetto (status azzerato)',
   },
+  statuses: [
+    // Forme (trasformazioni): impostate dalla tappa, occupano lo slot "forma".
+    { id: 'maiale', emoji: '🐷', label: 'Maiale', kind: 'form', instruction: 'Correte annusando per terra come maialini!' },
+    { id: 'serpente', emoji: '🐍', label: 'Serpente', kind: 'form', instruction: 'Strisciate pancia a terra sibilando come serpenti!' },
+    { id: 'rana', emoji: '🐸', label: 'Rana', kind: 'form', instruction: 'Saltate a piedi uniti come rane!' },
+    { id: 'leone', emoji: '🦁', label: 'Leone', kind: 'form', instruction: 'Correte fieri ruggendo come leoni!' },
+    { id: 'drago', emoji: '🐉', label: 'Drago', kind: 'form', instruction: 'Volate a braccia aperte come draghi!' },
+    { id: 'umano', emoji: '👦', label: 'Di nuovo umani', kind: 'form', instruction: 'La maledizione è spezzata: correte liberi come bambini!' },
+    // Effetti sfida (buff/curse): impostati dall'esito, occupano lo slot "effetto".
+    { id: 'super_veloci', emoji: '⚡', label: 'Super veloci', kind: 'buff', instruction: 'Potere del vento: correte velocissimi fino alla prossima sfida!' },
+    { id: 'gigante', emoji: '🦖', label: 'Passi da gigante', kind: 'buff', instruction: 'Camminate a passi enormi da gigante fino alla prossima sfida!' },
+    { id: 'gamba_sola', emoji: '🦵', label: 'Gamba sola', kind: 'curse', instruction: 'Saltellate su una gamba sola fino alla prossima sfida!' },
+    { id: 'occhi_chiusi', emoji: '🙈', label: 'Occhi chiusi', kind: 'curse', instruction: 'Avanzate con gli occhi chiusi, una mano sulla spalla di una guida, fino alla prossima sfida!' },
+    { id: 'muti', emoji: '🤫', label: 'Muti', kind: 'curse', instruction: 'Vietato parlare: solo gesti fino alla prossima sfida!' },
+    { id: 'gambero', emoji: '🦀', label: 'Gambero', kind: 'curse', instruction: 'Camminate all\u2019indietro come un gambero fino alla prossima sfida!' },
+  ],
   guide: {
     heading: 'MAPPA E PREPARAZIONE (ITALIANO)',
     intro:

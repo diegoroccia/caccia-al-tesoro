@@ -50,4 +50,10 @@ body {
     margin-bottom: 2rem !important;
     box-shadow: none !important;
   }
+  /* Box sfida stampato: evita che si spezzi tra le pagine */
+  .print-challenge {
+    page-break-inside: avoid;
+    border-color: #8b5a2b !important;
+    color: #3e2723 !important;
+  }
 }
